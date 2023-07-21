@@ -1,18 +1,10 @@
-package com.windsor.mockbank;
+package com.windsor.mockbank.util;
 
 import java.util.UUID;
 
 public class UniqueIdentifierGenerator {
 
-    public static void main(String[] args) {
-        String transactionUniqueIdentifier = generateTransactionUniqueIdentifier();
-        System.out.println("Transaction: "+transactionUniqueIdentifier);
-
-        String userUniqueIdentifier = generateUserUniqueIdentityKey();
-        System.out.println("User: "+userUniqueIdentifier);
-    }
-
-    private static String generateTransactionUniqueIdentifier() {
+    public static String generateTransactionUniqueIdentifier() {
         UUID uuid = UUID.randomUUID();
         String uuidString = uuid.toString();
 
@@ -21,7 +13,7 @@ public class UniqueIdentifierGenerator {
 
         // 插入指定的分隔符
         StringBuilder uniqueIdentifier = new StringBuilder();
-        int[] dashPositions = { 8, 12, 16, 20 };
+        int[] dashPositions = {8, 12, 16, 20};
         int startIndex = 0;
         for (int position : dashPositions) {
             uniqueIdentifier.append(withoutHyphens, startIndex, position).append("-");
@@ -32,7 +24,7 @@ public class UniqueIdentifierGenerator {
         return uniqueIdentifier.toString();
     }
 
-    private static String generateUserUniqueIdentityKey() {
+    public static String generateUserUniqueIdentityKey() {
         // 生成UUID
         UUID uuid = UUID.randomUUID();
 
