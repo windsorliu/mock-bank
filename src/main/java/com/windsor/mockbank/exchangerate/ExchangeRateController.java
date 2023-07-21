@@ -15,7 +15,7 @@ public class ExchangeRateController {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "https://v6.exchangerate-api.com/v6/17087be03d3ba9d5e77dfec3/latest/"+baseCode.toUpperCase();
+        String url = "https://v6.exchangerate-api.com/v6/17087be03d3ba9d5e77dfec3/latest/" + baseCode.toUpperCase();
 
         ExchangeRateData exchangeRateData = restTemplate.getForObject(url, ExchangeRateData.class);
 
