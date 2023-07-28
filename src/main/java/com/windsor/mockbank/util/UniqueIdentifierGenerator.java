@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class UniqueIdentifierGenerator {
 
-    public static String generateTransactionUniqueIdentifier() {
+    public static String generateTransactionKey() {
         UUID uuid = UUID.randomUUID();
         String uuidString = uuid.toString();
 
@@ -24,7 +24,7 @@ public class UniqueIdentifierGenerator {
         return uniqueIdentifier.toString();
     }
 
-    public static String generateUserUniqueIdentityKey() {
+    public static String generateUserKey() {
         // 生成UUID
         UUID uuid = UUID.randomUUID();
 

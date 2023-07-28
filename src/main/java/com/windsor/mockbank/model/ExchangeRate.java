@@ -1,4 +1,4 @@
-package com.windsor.mockbank.exchangerate;
+package com.windsor.mockbank.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,8 +10,9 @@ import java.util.Map;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExchangeRateData {
+public class ExchangeRate {
 
+    private Integer id;
     private String result;
     private String documentation;
 
