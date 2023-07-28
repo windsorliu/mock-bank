@@ -1,5 +1,6 @@
-package com.windsor.mockbank.jwt;
+package com.windsor.mockbank.controller;
 
+import com.windsor.mockbank.util.JwtTokenGenerator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import org.springframework.web.bind.annotation.GetMapping;

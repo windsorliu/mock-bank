@@ -9,10 +9,11 @@ import java.util.Date;
 @Data
 public class User {
 
-    private Integer id;
+    @JsonProperty("user_id")
+    private Integer userId;
 
-    @JsonProperty("unique_id")
-    private String uniqueId;
+    @JsonProperty("user_key")
+    private String userKey;
     private String email;
 
     @JsonIgnore

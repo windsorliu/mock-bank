@@ -1,4 +1,4 @@
-package com.windsor.mockbank.jwt;
+package com.windsor.mockbank.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

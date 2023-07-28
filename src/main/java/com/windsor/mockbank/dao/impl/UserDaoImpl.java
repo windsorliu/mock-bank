@@ -24,15 +24,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserById(Integer id) {
-        String sql = "SELECT id, unique_id, email, password, created_date, last_modified_date " +
-                "FROM user WHERE id = :id";
+        String sql = "SELECT user_id, user_key, email, password, created_date, last_modified_date " +
+                "FROM user WHERE user_id = :userId";
 
-        return getUser(sql, "id", id);
+        return getUser(sql, "userId", id);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        String sql = "SELECT id, unique_id, email, password, created_date, last_modified_date " +
+        String sql = "SELECT user_id, user_key, email, password, created_date, last_modified_date " +
                 "FROM user WHERE email = :email";
 
         return getUser(sql, "email", email);
@@ -53,10 +53,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Integer createUser(UserRegisterRequest userRegisterRequest) {
-        String sql = "INSERT INTO user(unique_id, email, password) VALUES (:uniqueId, :email, :password)";
+        String sql = "INSERT INTO user(user_key, email, password) VALUES (:userKey, :email, :password)";
 
         Map<String, Object> map = new HashMap<>();
-        map.put("uniqueId", userRegisterRequest.getUniqueId());
+        map.put("userKey", userRegisterRequest.getUserKey());
         map.put("email", userRegisterRequest.getEmail());
         map.put("password", userRegisterRequest.getPassword());
 
@@ -68,4 +68,26 @@ public class UserDaoImpl implements UserDao {
 
         return id;
     }
+
+    @Override
+    public String generateUserData(List<UserRegisterRequest> userRegisterRequestList) {
+        String sql = "INSERT INTO user(user_key, email, password) VALUE (:userKey, :email, :password)";
+
+        MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[userRegisterRequestList.size()];
+
+        for (int i = 0; i < userRegisterRequestList.size(); i++) {
+            UserRegisterRequest userRegisterRequest = userRegisterRequestList.get(i);
+
+            parameterSources[i] = new MapSqlParameterSource();
+            parameterSources[i].addValue("userKey", userRegisterRequest.getUserKey());
+            parameterSources[i].addValue("email", userRegisterRequest.getEmail());
+            parameterSources[i].addValue("password", userRegisterRequest.getPassword());
+        }
+
+        namedParameterJdbcTemplate.batchUpdate(sql, parameterSources);
+
+        return "BATCH INSERT SUCCESS";
+    }
+
+
 }

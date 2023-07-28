@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final static Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
         userRegisterRequest.setPassword(hashedPassword);
 
         // 生成user的unique_id
-        userRegisterRequest.setUniqueId(UniqueIdentifierGenerator.generateUserUniqueIdentityKey());
+        userRegisterRequest.setUserKey(UniqueIdentifierGenerator.generateUserKey());
 
 
         // 創建帳號
@@ -68,5 +70,10 @@ public class UserServiceImpl implements UserService {
             log.warn("email: {} wrong password", userLoginRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public String generateUserData(List<UserRegisterRequest> userRegisterRequestList) {
+        return userDao.generateUserData(userRegisterRequestList);
     }
 }
