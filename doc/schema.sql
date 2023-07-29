@@ -1,4 +1,5 @@
-CREATE DATABASE mockbank;
+CREATE
+DATABASE mockbank;
 
 -- User
 
@@ -23,7 +24,7 @@ CREATE TABLE account
     balance            DECIMAL(12, 2)                      NOT NULL,
     created_date       TIMESTAMP default CURRENT_TIMESTAMP NOT NULL,
     last_modified_date TIMESTAMP default CURRENT_TIMESTAMP NOT NULL on update CURRENT_TIMESTAMP,
-    INDEX idx_user_id (user_id)
+    INDEX              idx_user_id (user_id)
 );
 
 -- Transaction
@@ -38,8 +39,8 @@ CREATE TABLE transaction
     amount_currency  VARCHAR(5)                          NOT NULL,
     transaction_date TIMESTAMP default CURRENT_TIMESTAMP NOT NULL,
     description      VARCHAR(100),
-    INDEX idx_user_id (user_id),
-    INDEX idx_account_id (account_id)
+    INDEX            idx_user_id (user_id),
+    INDEX            idx_account_id (account_id)
 );
 
 -- Exchange_Rate
@@ -50,9 +51,9 @@ CREATE TABLE exchange_rate
     result                VARCHAR(20)  NOT NULL,
     documentation         VARCHAR(100) NOT NULL,
     terms_of_use          VARCHAR(100) NOT NULL,
-    time_last_update_unix INT          NOT NULL,
+    time_last_update_unix BIGINT       NOT NULL,
     time_last_update_utc  VARCHAR(100) NOT NULL,
-    time_next_update_unix INT          NOT NULL,
+    time_next_update_unix BIGINT       NOT NULL,
     time_next_update_utc  VARCHAR(100) NOT NULL,
     base_code             VARCHAR(5)   NOT NULL,
     conversion_rates      JSON         NOT NULL
