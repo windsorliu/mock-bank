@@ -3,7 +3,6 @@ package com.windsor.mockbank.util;
 import com.github.javafaker.Faker;
 import com.windsor.mockbank.dto.UserRegisterRequest;
 
-
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -19,7 +18,7 @@ public class UserDataGenerator {
             String uniqueId = UniqueIdentifierGenerator.generateUserKey();
             String email = faker.internet().emailAddress();
             String password = generateRandomPassword(12); // 生成12個字符長的密碼
-            
+
             UserRegisterRequest userRegisterRequest = new UserRegisterRequest(uniqueId, email, password);
             userRegisterRequestList.add(userRegisterRequest);
         }

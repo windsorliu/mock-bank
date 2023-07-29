@@ -20,13 +20,13 @@ public class ExchangeRate {
     private String termsOfUse;
 
     @JsonProperty("time_last_update_unix")
-    private long timeLastUpdateUnix;
+    private Long timeLastUpdateUnix;
 
     @JsonProperty("time_last_update_utc")
     private String timeLastUpdateUtc;
 
     @JsonProperty("time_next_update_unix")
-    private long timeNextUpdateUnix;
+    private Long timeNextUpdateUnix;
 
     @JsonProperty("time_next_update_utc")
     private String timeNextUpdateUtc;
@@ -35,5 +35,5 @@ public class ExchangeRate {
     private String baseCode;
 
     @JsonProperty("conversion_rates")
-    private Map<String, Double> conversionRates;
+    private Map<String, Object> conversionRates;
 }
