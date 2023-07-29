@@ -1,10 +1,9 @@
 package com.windsor.mockbank.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.Key;
 
@@ -14,6 +13,7 @@ public class JwtTokenGenerator {
 
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     private static final long EXPIRATION_TIME = 7200000; // Token 過期时间 (2 小時)
+    private static final Logger log = LoggerFactory.getLogger(JwtTokenGenerator.class);
 
     public static String generateJwtToken(String userId) {
         Date now = new Date();
@@ -26,11 +26,24 @@ public class JwtTokenGenerator {
                 .signWith(SECRET_KEY)
                 .compact();
 
-        return token;
+        // 添加 "Bearer " 前缀
+        return "Bearer " + token;
     }
 
     public static Jws<Claims> validateJwtToken(String token) {
-        Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
-        return claims;
+        try {
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token);
+
+            return claims;
+        } catch (ExpiredJwtException e) {
+            log.warn("JWT token has expired.");
+        } catch (SignatureException e) {
+            log.warn("Signature verification failed, JWT token is invalid.");
+        } catch (Exception e) {
+            log.warn("Exception：{}", e.getMessage());
+        }
+        return null; // 在出現異常時返回 null
     }
 }

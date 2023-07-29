@@ -22,8 +22,8 @@ public class ExchangeRateController {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
-    @GetMapping
-    public ResponseEntity<ExchangeRate> getExchangeRate() {
+    @GetMapping("/update")
+    public ResponseEntity<ExchangeRate> updateExchangeRate() {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -38,7 +38,7 @@ public class ExchangeRateController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExchangeRate> test(@PathVariable Integer id) {
+    public ResponseEntity<ExchangeRate> getExchangeRateById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(exchangeRateService.getData(id));
     }
