@@ -1,4 +1,4 @@
-package com.windsor.mockbank.rowmapper;
+package com.windsor.mockbank.notsure;
 
 
 import com.windsor.mockbank.model.User;
@@ -14,6 +14,7 @@ public class UserRowMapper implements RowMapper<User> {
 
         user.setUserId(resultSet.getInt("user_id"));
         user.setUserKey(resultSet.getString("user_key"));
+        user.setToken(resultSet.getString("token"));
         user.setEmail(resultSet.getString("email"));
         user.setPassword(resultSet.getString("password"));
         user.setCreatedDate(resultSet.getTimestamp("created_date"));

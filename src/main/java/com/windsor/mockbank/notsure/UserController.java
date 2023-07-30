@@ -1,9 +1,8 @@
-package com.windsor.mockbank.controller;
+package com.windsor.mockbank.notsure;
 
-import com.windsor.mockbank.dto.UserLoginRequest;
-import com.windsor.mockbank.dto.UserRegisterRequest;
+import com.windsor.mockbank.notsure.dto.UserLoginRequest;
+import com.windsor.mockbank.notsure.dto.UserRegisterRequest;
 import com.windsor.mockbank.model.User;
-import com.windsor.mockbank.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

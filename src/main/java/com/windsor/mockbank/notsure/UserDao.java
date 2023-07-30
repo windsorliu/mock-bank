@@ -1,8 +1,7 @@
-package com.windsor.mockbank.dao;
+package com.windsor.mockbank.notsure;
 
-import com.windsor.mockbank.dto.UserRegisterRequest;
+import com.windsor.mockbank.notsure.dto.UserRegisterRequest;
 import com.windsor.mockbank.model.User;
-import com.windsor.mockbank.rowmapper.UserRowMapper;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.beans.factory.annotation.Autowired;

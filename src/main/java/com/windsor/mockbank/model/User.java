@@ -14,6 +14,7 @@ public class User {
 
     @JsonProperty("user_key")
     private String userKey;
+    private String token;
     private String email;
 
     @JsonIgnore
