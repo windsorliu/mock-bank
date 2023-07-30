@@ -1,6 +1,7 @@
 package com.windsor.mockbank.controller;
 
 import com.windsor.mockbank.dto.UserRegisterRequest;
+import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.service.GenerateDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,10 +24,15 @@ public class GenerateDataController {
     @Value("${numberOfUsers}")
     private int numberOfUsers;
 
-    @GetMapping("/user-data")
-    public void generateUserData() {
+    @GetMapping("/user")
+    public void generateUsers() {
 
-        List<UserRegisterRequest> userRegisterRequestList = generateDataService.generateUsers(numberOfUsers);
-        generateDataService.createUserData(userRegisterRequestList);
+        generateDataService.generateUsers(numberOfUsers);
+    }
+
+    @GetMapping("/account")
+    public void generateAccountData() {
+
+        generateDataService.generateAccounts();
     }
 }
