@@ -1,4 +1,4 @@
-package com.windsor.mockbank.dto;
+package com.windsor.mockbank.notsure.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -4,8 +4,6 @@ import com.windsor.mockbank.model.ExchangeRate;
 import com.windsor.mockbank.service.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +21,7 @@ public class ExchangeRateController {
     private ExchangeRateService exchangeRateService;
 
     @GetMapping("/update")
-    public ResponseEntity<ExchangeRate> updateExchangeRate() {
+    public ExchangeRate updateExchangeRate() {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -33,13 +31,12 @@ public class ExchangeRateController {
 
         Integer id = exchangeRateService.createData(exchangeRate);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(exchangeRateService.getData(id));
+        //如果沒有返回，代表更新失敗
+        return exchangeRateService.getData(id);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExchangeRate> getExchangeRateById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(exchangeRateService.getData(id));
+    public ExchangeRate getExchangeRateById(@PathVariable Integer id) {
+        return exchangeRateService.getData(id);
     }
 }

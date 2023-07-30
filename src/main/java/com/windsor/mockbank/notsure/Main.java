@@ -1,4 +1,6 @@
-package com.windsor.mockbank.constant;
+package com.windsor.mockbank.notsure;
+
+import com.windsor.mockbank.constant.Currency;
 
 import java.util.Random;
 

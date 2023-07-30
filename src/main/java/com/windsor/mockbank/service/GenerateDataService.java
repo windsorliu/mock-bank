@@ -2,9 +2,10 @@ package com.windsor.mockbank.service;
 
 import com.github.javafaker.Faker;
 import com.windsor.mockbank.dao.GenerateDataDao;
-import com.windsor.mockbank.dto.UserRegisterRequest;
+import com.windsor.mockbank.model.User;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.constant.Currency;
+import com.windsor.mockbank.util.JwtTokenGenerator;
 import com.windsor.mockbank.util.UniqueIdentifierGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,19 +21,23 @@ public class GenerateDataService {
     private GenerateDataDao generateDataDao;
 
     public void generateUsers(int numberOfUsers) {
-        List<UserRegisterRequest> userRegisterRequestList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
         Faker faker = new Faker();
 
         for (int i = 0; i < numberOfUsers; i++) {
-            String uniqueId = UniqueIdentifierGenerator.generateUserKey();
-            String email = faker.internet().emailAddress();
-            String password = generateRandomPassword(12); // 生成12個字符長的密碼
+            User user = new User();
 
-            UserRegisterRequest userRegisterRequest = new UserRegisterRequest(uniqueId, email, password);
-            userRegisterRequestList.add(userRegisterRequest);
+            String userKey = UniqueIdentifierGenerator.generateUserKey();
+
+            user.setUserKey(userKey);
+            user.setToken(JwtTokenGenerator.generateJwtToken(userKey));
+            user.setEmail(faker.internet().emailAddress());
+            user.setPassword(generateRandomPassword(12)); // 生成12個字符長的密碼
+
+            userList.add(user);
         }
 
-        generateDataDao.generateUsers(userRegisterRequestList);
+        generateDataDao.generateUsers(userList);
     }
 
     private String generateRandomPassword(int length) {
@@ -60,7 +65,7 @@ public class GenerateDataService {
                 Currency randomCurrency = currencies[random.nextInt(currencies.length)];
                 account.setCurrency(randomCurrency.name());
 
-                account.setBalance(BigDecimal.valueOf(random.nextInt(10000000 - 1000 + 1) + 1000));  // (max - min + 1) + min
+                account.setBalance(BigDecimal.valueOf(random.nextInt(10000000 - 100 + 1) + 100));  // (max - min + 1) + min
 
                 accountList.add(account);
             }

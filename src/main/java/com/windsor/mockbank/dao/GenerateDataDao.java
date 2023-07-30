@@ -1,6 +1,6 @@
 package com.windsor.mockbank.dao;
 
-import com.windsor.mockbank.dto.UserRegisterRequest;
+import com.windsor.mockbank.model.User;
 import com.windsor.mockbank.model.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,23 +20,24 @@ public class GenerateDataDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final static Logger log = LoggerFactory.getLogger(GenerateDataDao.class);
 
-    public void generateUsers(List<UserRegisterRequest> userRegisterRequestList) {
-        String sql = "INSERT INTO user(user_key, email, password) VALUE (:userKey, :email, :password)";
+    public void generateUsers(List<User> userList) {
+        String sql = "INSERT INTO user(user_key, token, email, password) VALUE (:user_key, :token, :email, :password)";
 
-        MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[userRegisterRequestList.size()];
+        MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[userList.size()];
 
-        for (int i = 0; i < userRegisterRequestList.size(); i++) {
-            UserRegisterRequest userRegisterRequest = userRegisterRequestList.get(i);
+        for (int i = 0; i < userList.size(); i++) {
+            User user = userList.get(i);
 
             parameterSources[i] = new MapSqlParameterSource();
-            parameterSources[i].addValue("userKey", userRegisterRequest.getUserKey());
-            parameterSources[i].addValue("email", userRegisterRequest.getEmail());
-            parameterSources[i].addValue("password", userRegisterRequest.getPassword());
+            parameterSources[i].addValue("user_key", user.getUserKey());
+            parameterSources[i].addValue("token", user.getToken());
+            parameterSources[i].addValue("email", user.getEmail());
+            parameterSources[i].addValue("password", user.getPassword());
         }
 
         namedParameterJdbcTemplate.batchUpdate(sql, parameterSources);
 
-        log.info("Successfully generated {} records of users data.", userRegisterRequestList.size());
+        log.info("Successfully generated {} records of users data.", userList.size());
     }
 
     public List<Integer> getUserIdList() {

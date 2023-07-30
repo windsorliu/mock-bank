@@ -1,8 +1,7 @@
-package com.windsor.mockbank.service;
+package com.windsor.mockbank.notsure;
 
-import com.windsor.mockbank.dao.UserDao;
-import com.windsor.mockbank.dto.UserLoginRequest;
-import com.windsor.mockbank.dto.UserRegisterRequest;
+import com.windsor.mockbank.notsure.dto.UserLoginRequest;
+import com.windsor.mockbank.notsure.dto.UserRegisterRequest;
 import com.windsor.mockbank.model.User;
 import com.windsor.mockbank.util.UniqueIdentifierGenerator;
 import org.slf4j.Logger;

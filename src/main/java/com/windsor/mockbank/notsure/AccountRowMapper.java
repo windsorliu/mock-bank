@@ -1,4 +1,4 @@
-package com.windsor.mockbank.rowmapper;
+package com.windsor.mockbank.notsure;
 
 import com.windsor.mockbank.model.Account;
 import org.springframework.jdbc.core.RowMapper;

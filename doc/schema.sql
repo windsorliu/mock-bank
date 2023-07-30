@@ -7,6 +7,7 @@ CREATE TABLE user
 (
     user_id            INT AUTO_INCREMENT PRIMARY KEY,
     user_key           VARCHAR(20)                         NOT NULL UNIQUE KEY,
+    token              VARCHAR(300)                        NOT NULL,
     email              VARCHAR(50)                         NOT NULL UNIQUE KEY,
     password           VARCHAR(50)                         NOT NULL,
     created_date       TIMESTAMP default CURRENT_TIMESTAMP NOT NULL,
