@@ -1,7 +1,8 @@
-package com.windsor.mockbank.notsure;
+package com.windsor.mockbank.dao;
 
 import com.windsor.mockbank.notsure.dto.UserRegisterRequest;
 import com.windsor.mockbank.model.User;
+import com.windsor.mockbank.rowmapper.UserRowMapper;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UserDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public User getUserById(Integer id) {
-        String sql = "SELECT user_id, user_key, email, password, created_date, last_modified_date " +
+        String sql = "SELECT user_id, user_key, token, email, password, created_date, last_modified_date " +
                 "FROM user WHERE user_id = :userId";
 
         return getUser(sql, "userId", id);
@@ -47,13 +48,14 @@ public class UserDao {
         return userList.get(0);
     }
 
-    public Integer createUser(UserRegisterRequest userRegisterRequest) {
-        String sql = "INSERT INTO user(user_key, email, password) VALUES (:userKey, :email, :password)";
+    public Integer createUser(User user) {
+        String sql = "INSERT INTO user(user_key, token, email, password) VALUES (:user_key, :token, :email, :password)";
 
         Map<String, Object> map = new HashMap<>();
-        map.put("userKey", userRegisterRequest.getUserKey());
-        map.put("email", userRegisterRequest.getEmail());
-        map.put("password", userRegisterRequest.getPassword());
+        map.put("user_key", user.getUserKey());
+        map.put("token", user.getToken());
+        map.put("email", user.getEmail());
+        map.put("password", user.getPassword());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -62,6 +64,16 @@ public class UserDao {
         Integer id = keyHolder.getKey().intValue();
 
         return id;
+    }
+
+    public void updateToken(Integer userId, String token) {
+        String sql = "UPDATE user SET token = :token WHERE user_id = :user_id";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id", userId);
+        map.put("token", token);
+
+        namedParameterJdbcTemplate.update(sql, map);
     }
 
 }

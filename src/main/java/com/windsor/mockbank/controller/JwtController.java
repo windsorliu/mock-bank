@@ -16,7 +16,7 @@ public class JwtController {
 
     @GetMapping("/validate")
     public Jws<Claims> validate(@RequestHeader(name = "Authorization")
-                                    String authorization) {
+                                String authorization) {
 
         if (authorization != null && authorization.startsWith("Bearer ")) {
             return JwtTokenGenerator.validateJwtToken(

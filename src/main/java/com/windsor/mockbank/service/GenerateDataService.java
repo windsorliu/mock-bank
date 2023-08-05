@@ -17,27 +17,19 @@ import java.util.*;
 @Service
 public class GenerateDataService {
 
-    @Autowired
-    private GenerateDataDao generateDataDao;
+    public User generateUser() {
 
-    public void generateUsers(int numberOfUsers) {
-        List<User> userList = new ArrayList<>();
         Faker faker = new Faker();
+        User user = new User();
 
-        for (int i = 0; i < numberOfUsers; i++) {
-            User user = new User();
+        String userKey = UniqueIdentifierGenerator.generateUserKey();
 
-            String userKey = UniqueIdentifierGenerator.generateUserKey();
+        user.setUserKey(userKey);
+        user.setToken(JwtTokenGenerator.generateJwtToken(userKey));
+        user.setEmail(faker.internet().emailAddress());
+        user.setPassword(generateRandomPassword(12)); // 生成12個字符長的密碼
 
-            user.setUserKey(userKey);
-            user.setToken(JwtTokenGenerator.generateJwtToken(userKey));
-            user.setEmail(faker.internet().emailAddress());
-            user.setPassword(generateRandomPassword(12)); // 生成12個字符長的密碼
-
-            userList.add(user);
-        }
-
-        generateDataDao.generateUsers(userList);
+        return user;
     }
 
     private String generateRandomPassword(int length) {
@@ -47,31 +39,27 @@ public class GenerateDataService {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
 
-    public void generateAccounts() {
-        List<Account> accountList = new ArrayList<>();
+    public List<Account> generateAccount(Integer userId) {
         Random random = new Random();
-        List<Integer> userIdList = generateDataDao.getUserIdList();
+        List<Account> accountList = new ArrayList<>();
 
-        for (int i = 0; i < userIdList.size(); i++) {
-            int numOfAccounts = random.nextInt(3) + 1; // 每個user最少1個，最多3個帳戶
+        int numOfAccounts = random.nextInt(3) + 1; // 每個user最少1個，最多3個帳戶
 
-            for (int j = 0; j < numOfAccounts; j++) {
+        for (int j = 0; j < numOfAccounts; j++) {
+            Account account = new Account();
+            account.setAccountIBAN("IBAN-" + UUID.randomUUID().toString());
+            account.setUserId(userId);
 
-                Account account = new Account();
-                account.setAccountIBAN("IBAN-" + UUID.randomUUID().toString());
-                account.setUserId(userIdList.get(i));
+            Currency[] currencies = Currency.values();
+            Currency randomCurrency = currencies[random.nextInt(currencies.length)];
+            account.setCurrency(randomCurrency.name());
 
-                Currency[] currencies = Currency.values();
-                Currency randomCurrency = currencies[random.nextInt(currencies.length)];
-                account.setCurrency(randomCurrency.name());
+            account.setBalance(BigDecimal.valueOf(random.nextInt(10000000 - 100 + 1) + 100));  // (max - min + 1) + min
 
-                account.setBalance(BigDecimal.valueOf(random.nextInt(10000000 - 100 + 1) + 100));  // (max - min + 1) + min
-
-                accountList.add(account);
-            }
+            accountList.add(account);
         }
 
-        generateDataDao.generateAccounts(accountList);
+        return accountList;
     }
 }
 

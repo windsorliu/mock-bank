@@ -1,5 +1,6 @@
 package com.windsor.mockbank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -9,13 +10,13 @@ import java.util.Date;
 @Data
 public class Account {
 
-    @JsonProperty("account_id")
+    @JsonIgnore
     private int accountId;
 
     @JsonProperty("account_IBAN")
     private String accountIBAN;
 
-    @JsonProperty("user_id")
+    @JsonIgnore
     private int userId;
 
     private String currency;
