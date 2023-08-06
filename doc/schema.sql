@@ -32,23 +32,17 @@ CREATE TABLE account
 
 CREATE TABLE transaction
 (
-    transaction_id      INT AUTO_INCREMENT PRIMARY KEY,
-    transaction_key     VARCHAR(50)                         NOT NULL UNIQUE KEY,
-    remitter_user_id    INT                                 NOT NULL,
-    remitter_account_id INT                                 NOT NULL,
-    remitter_amount     DECIMAL(12, 2)                      NOT NULL,
-    remitter_currency   VARCHAR(5)                          NOT NULL,
-    payee_user_id       INT                                 NOT NULL,
-    payee_account_id    INT                                 NOT NULL,
-    payee_amount        DECIMAL(12, 2)                      NOT NULL,
-    payee_currency      VARCHAR(5)                          NOT NULL,
-    created_date        TIMESTAMP default CURRENT_TIMESTAMP NOT NULL,
-    last_modified_date  TIMESTAMP default CURRENT_TIMESTAMP NOT NULL on update CURRENT_TIMESTAMP,
-    description         VARCHAR(100),
-    INDEX idx_remitter_user_id (remitter_user_id),
-    INDEX idx_remitter_account_id (remitter_account_id),
-    INDEX idx_payee_user_id (payee_user_id),
-    INDEX idx_payee_account_id (payee_account_id)
+    transaction_id        INT AUTO_INCREMENT PRIMARY KEY,
+    transaction_key       VARCHAR(50)                         NOT NULL UNIQUE KEY,
+    remitter_account_IBAN VARCHAR(50)                         NOT NULL UNIQUE KEY,
+    payee_account_IBAN    VARCHAR(50)                         NOT NULL UNIQUE KEY,
+    amount                DECIMAL(12, 2)                      NOT NULL,
+    currency              VARCHAR(5)                          NOT NULL,
+    created_date          TIMESTAMP default CURRENT_TIMESTAMP NOT NULL,
+    last_modified_date    TIMESTAMP default CURRENT_TIMESTAMP NOT NULL on update CURRENT_TIMESTAMP,
+    description           VARCHAR(100),
+    INDEX                 idx_remitter_account_IBAN (remitter_account_IBAN),
+    INDEX                 idx_payee_account_IBAN (payee_account_IBAN)
 );
 
 -- Exchange_Rate
@@ -65,5 +59,5 @@ CREATE TABLE exchange_rate
     time_next_update_utc  VARCHAR(100) NOT NULL,
     base_code             VARCHAR(5)   NOT NULL,
     conversion_rates      JSON         NOT NULL,
-    INDEX idx_time_last_update_unix (time_last_update_unix)
+    INDEX                 idx_time_last_update_unix (time_last_update_unix)
 );

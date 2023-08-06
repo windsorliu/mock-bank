@@ -15,12 +15,11 @@ public class KafkaProducer {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void sendTransaction(String producer) throws JsonProcessingException {
-
+    public void sendTransaction(Transaction transaction) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        Transaction transaction = objectMapper.readValue(producer, Transaction.class);
-        kafkaTemplate.send(TOPIC, transaction.getTransactionKey(), producer);
-        System.out.println("Sent transaction: " + producer);
+        String transactionJson = objectMapper.writeValueAsString(transaction);
+
+        kafkaTemplate.send(TOPIC, transaction.getTransactionKey(), transactionJson);
     }
 }
 

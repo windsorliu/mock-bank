@@ -1,15 +1,15 @@
 package com.windsor.mockbank.dao;
 
-import com.windsor.mockbank.notsure.dto.UserRegisterRequest;
 import com.windsor.mockbank.model.User;
 import com.windsor.mockbank.rowmapper.UserRowMapper;
-import org.springframework.stereotype.Repository;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +20,8 @@ public class UserDao {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    private final static Logger log = LoggerFactory.getLogger(UserDao.class);
 
     public User getUserById(Integer id) {
         String sql = "SELECT user_id, user_key, token, email, password, created_date, last_modified_date " +
@@ -63,6 +65,8 @@ public class UserDao {
 
         Integer id = keyHolder.getKey().intValue();
 
+        log.info("Creating user: {}", user.getUserKey());
+
         return id;
     }
 
@@ -75,5 +79,4 @@ public class UserDao {
 
         namedParameterJdbcTemplate.update(sql, map);
     }
-
 }

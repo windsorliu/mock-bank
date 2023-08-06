@@ -18,29 +18,14 @@ public class Transaction {
     @JsonProperty("transaction_key")
     private String transactionKey;
 
-    @JsonProperty("remitter_user_id")
-    private Integer remitterUserId;
+    @JsonProperty("remitter_account_IBAN")
+    private String remitterAccountIBAN;
 
-    @JsonProperty("remitter_account_id")
-    private Integer remitterAccountId;
+    @JsonProperty("payee_account_IBAN")
+    private String payeeAccountIBAN;
 
-    @JsonProperty("remitter_amount")
-    private BigDecimal remitterAmount;
-
-    @JsonProperty("remitter_currency")
-    private String remitterCurrency;
-
-    @JsonProperty("payee_user_id")
-    private Integer payeeUserId;
-
-    @JsonProperty("payee_account_id")
-    private Integer payeeAccountId;
-
-    @JsonProperty("payee_amount")
-    private BigDecimal payeeAmount;
-
-    @JsonProperty("payee_currency")
-    private String payeeCurrency;
+    private BigDecimal amount;
+    private String currency;
 
     @JsonProperty("created_date")
     private Date createdDate;

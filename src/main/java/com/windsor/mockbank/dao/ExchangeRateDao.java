@@ -54,7 +54,6 @@ public class ExchangeRateDao {
     }
 
     public ExchangeRate getData(Integer id) {
-
         String sql = "SELECT id, result, documentation, terms_of_use, " +
                 "time_last_update_unix, time_last_update_utc, " +
                 "time_next_update_unix, time_next_update_utc, " +
@@ -90,6 +89,4 @@ public class ExchangeRateDao {
             return exchangeRateList.get(0);
         }
     }
-
-
 }
