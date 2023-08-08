@@ -136,7 +136,7 @@ public class Application {
         }
     }
 
-    @Scheduled(fixedRate = 900000/*3600000*/) // Call Transaction API every 1 hour
+    @Scheduled(fixedRate = 4200000) // Call Transaction API every 70 min
     public void updateExchangeRate() {
         if (running) {
             RestTemplate restTemplate = new RestTemplate();
