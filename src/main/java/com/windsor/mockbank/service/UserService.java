@@ -30,7 +30,7 @@ public class UserService {
 
         if (userCheck != null) {
             log.warn("The email: {} has been registered", userRequest.getEmail());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
 
         String userKey = UniqueIdentifierGenerator.generateUserKey();
@@ -59,7 +59,7 @@ public class UserService {
             return userCheck;
         } else {
             log.warn("email: {} wrong password", userRequest.getEmail());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 }

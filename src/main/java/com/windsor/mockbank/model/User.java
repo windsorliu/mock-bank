@@ -2,6 +2,7 @@ package com.windsor.mockbank.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,7 +10,6 @@ import java.util.Date;
 @Data
 public class User {
 
-    @JsonIgnore
     @JsonProperty("user_id")
     private Integer userId;
 
@@ -23,8 +23,10 @@ public class User {
     private String password;
 
     @JsonProperty("created_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdDate;
 
     @JsonProperty("last_modified_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastModifiedDate;
 }

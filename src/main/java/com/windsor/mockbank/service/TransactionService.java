@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 
 @Service
@@ -32,12 +33,22 @@ public class TransactionService {
     private ExchangeRateDao exchangeRateDao;
 
     public String getTransactionKey(Transaction transaction) {
+        // 取得 匯款帳戶貨幣 與 交易貨幣 的 匯率
         Account remitterAccount = accountDao.getAccountByIBAN(transaction.getRemitterAccountIBAN());
+        ExchangeRate exchangeRate = exchangeRateDao.getLatestData();
 
-        // 如果餘額不足
-        if (remitterAccount.getBalance().compareTo(transaction.getAmount()) < 0) {
-            log.warn("The account: {} does not have " +
-                            "sufficient balance for the transaction."
+        String remitterCurrency = remitterAccount.getCurrency();
+        String transactionCurrency = transaction.getCurrency();
+
+        BigDecimal remitterRate = getRate(exchangeRate,remitterCurrency);
+        BigDecimal transactionRate = getRate(exchangeRate,transactionCurrency);
+
+        // 將 匯款帳戶餘額對應調整成交易匯率
+        BigDecimal remitterBalance = remitterAccount.getBalance().multiply(transactionRate).divide(remitterRate, 2, RoundingMode.HALF_EVEN);
+
+        // 如果餘額小於這次的交易金額
+        if (remitterBalance.compareTo(transaction.getAmount()) < 0) {
+            log.warn("The account: {} does not have sufficient balance for the transaction"
                     , remitterAccount.getAccountIBAN());
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -47,10 +58,6 @@ public class TransactionService {
     }
 
     public void createTransaction(Transaction transaction) {
-        // call 匯率API
-        ExchangeRate exchangeRate = exchangeRateDao.getLatestData();
-        Map<String, BigDecimal> conversionRates = exchangeRate.getConversionRates();
-
         // 取得 匯款帳戶、收款帳戶
         Account remitterAccount = accountDao.getAccountByIBAN(transaction.getRemitterAccountIBAN());
         Account payeeAccount = accountDao.getAccountByIBAN(transaction.getPayeeAccountIBAN());
@@ -60,13 +67,16 @@ public class TransactionService {
         String payeeCurrency = payeeAccount.getCurrency();
         String transactionCurrency = transaction.getCurrency();
 
-        // 調整 匯款帳戶、收款帳戶的餘額
-        BigDecimal remitterRate = conversionRates.get(remitterCurrency);
-        BigDecimal payeeRate = conversionRates.get(payeeCurrency);
-        BigDecimal transactionRate = conversionRates.get(transactionCurrency);
+        // 取得 本次交易的貨幣匯率
+        ExchangeRate exchangeRate = exchangeRateDao.getLatestData();
 
-        BigDecimal remitterAmount = transaction.getAmount().multiply(remitterRate).divide(transactionRate, 2, BigDecimal.ROUND_HALF_UP);
-        BigDecimal payeeAmount = transaction.getAmount().multiply(payeeRate).divide(transactionRate, 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal remitterRate = getRate(exchangeRate,remitterCurrency);
+        BigDecimal payeeRate = getRate(exchangeRate,payeeCurrency);
+        BigDecimal transactionRate =  getRate(exchangeRate,transactionCurrency);
+
+        // 調整 匯款帳戶、收款帳戶的餘額
+        BigDecimal remitterAmount = transaction.getAmount().multiply(remitterRate).divide(transactionRate, 2, RoundingMode.HALF_EVEN);
+        BigDecimal payeeAmount = transaction.getAmount().multiply(payeeRate).divide(transactionRate, 2, RoundingMode.HALF_EVEN);
 
         BigDecimal remitterBalance = remitterAccount.getBalance().subtract(remitterAmount);
         BigDecimal payeeBalance = payeeAccount.getBalance().add(payeeAmount);
@@ -75,5 +85,13 @@ public class TransactionService {
         accountDao.updateBalance(payeeBalance, transaction.getPayeeAccountIBAN());
 
         transactionDao.createTransaction(transaction);
+    }
+
+    private BigDecimal getRate(ExchangeRate exchangeRate, String currency) {
+        Map<String, BigDecimal> conversionRates = exchangeRate.getConversionRates();
+        Number number = conversionRates.get(currency);
+        BigDecimal rate = new BigDecimal(number.toString());
+
+        return rate;
     }
 }

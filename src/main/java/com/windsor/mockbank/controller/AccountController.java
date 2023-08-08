@@ -21,9 +21,9 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<AccountRequest> createAccounts(@RequestBody List<Account> accountList) {
+    public ResponseEntity<AccountRequest> createAccounts(@RequestBody AccountRequest requestBody) {
         AccountRequest accountRequest = new AccountRequest();
-        List<Account> accountResponseList = accountService.createAccounts(accountList);
+        List<Account> accountResponseList = accountService.createAccounts(requestBody.getAccountList());
 
         accountRequest.setAccountList(accountResponseList);
         return ResponseEntity.status(HttpStatus.CREATED).body(accountRequest);

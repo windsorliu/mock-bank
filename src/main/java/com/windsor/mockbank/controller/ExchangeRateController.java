@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/api/exchangerate")
 public class ExchangeRateController {

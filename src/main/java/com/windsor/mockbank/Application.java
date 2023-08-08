@@ -33,7 +33,7 @@ import org.springframework.web.client.RestTemplate;
 public class Application {
 
     private final static Logger log = LoggerFactory.getLogger(Application.class);
-    private volatile boolean running = true;
+    private volatile boolean running = false;
 
     @Autowired
     private TransactionDataGenerator transactionDataGenerator;
@@ -59,17 +59,16 @@ public class Application {
     @Scheduled(fixedRate = 5000) // Call User API every 5 seconds
     public void callUserApi() {
         if (running) {
+            RestTemplate restTemplate = new RestTemplate();
+
             //Call User API and generate a user
             UserRequest userRequest = UserDataGenerator.generateUser();
-
-            ResponseEntity<User> user = callApi("http://localhost:8080/api/users/signup",
+            User user = restTemplate.postForObject("http://localhost:8080/api/users/signup",
                     userRequest, User.class);
 
             //Call Account API and generate accounts
-            AccountRequest accountRequest = new AccountRequest();
-            accountRequest.setAccountList(AccountDataGenerator.generateAccount(user.getBody().getUserId()));
-
-            callApi("http://localhost:8080/api/accounts",
+            AccountRequest accountRequest = AccountDataGenerator.generateAccount(user.getUserId());
+            restTemplate.postForObject("http://localhost:8080/api/accounts",
                     accountRequest, Void.class);
         }
     }
@@ -153,7 +152,7 @@ public class Application {
         }
     }
 
-    @Scheduled(fixedRate = 30000/*3600000*/) // Call Transaction API every 1 hour
+    @Scheduled(fixedRate = 900000/*3600000*/) // Call Transaction API every 1 hour
     public void updateExchangeRate() {
         if (running) {
             RestTemplate restTemplate = new RestTemplate();

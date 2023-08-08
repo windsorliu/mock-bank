@@ -14,7 +14,6 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExchangeRate {
 
-    @JsonIgnore
     private Integer id;
     private String result;
     private String documentation;

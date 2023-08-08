@@ -31,7 +31,7 @@ public class UserDao {
     }
 
     public User getUserByEmail(String email) {
-        String sql = "SELECT user_id, user_key, email, password, created_date, last_modified_date " +
+        String sql = "SELECT user_id, user_key, token, email, password, created_date, last_modified_date " +
                 "FROM user WHERE email = :email";
 
         return getUser(sql, "email", email);

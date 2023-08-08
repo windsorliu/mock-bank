@@ -42,7 +42,7 @@ public class TransactionDataGenerator {
         String currency=randomCurrency.name();
 
         // 選擇 匯款金額
-        int randomInt = random.nextInt(500000) + 1;  // 交易金額範圍1~500000
+        int randomInt = random.nextInt(100000) + 1;  // 交易金額範圍1~100000
         BigDecimal amount = BigDecimal.valueOf(randomInt);
 
         // 創建transaction資訊

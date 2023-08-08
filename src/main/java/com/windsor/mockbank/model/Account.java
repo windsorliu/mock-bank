@@ -10,14 +10,14 @@ import java.util.Date;
 @Data
 public class Account {
 
-    @JsonIgnore
-    private int accountId;
+    @JsonProperty("account_id")
+    private Integer accountId;
 
     @JsonProperty("account_IBAN")
     private String accountIBAN;
 
-    @JsonIgnore
-    private int userId;
+    @JsonProperty("user_id")
+    private Integer userId;
 
     private String currency;
     private BigDecimal balance;

@@ -34,8 +34,8 @@ CREATE TABLE transaction
 (
     transaction_id        INT AUTO_INCREMENT PRIMARY KEY,
     transaction_key       VARCHAR(50)                         NOT NULL UNIQUE KEY,
-    remitter_account_IBAN VARCHAR(50)                         NOT NULL UNIQUE KEY,
-    payee_account_IBAN    VARCHAR(50)                         NOT NULL UNIQUE KEY,
+    remitter_account_IBAN VARCHAR(50)                         NOT NULL,
+    payee_account_IBAN    VARCHAR(50)                         NOT NULL,
     amount                DECIMAL(12, 2)                      NOT NULL,
     currency              VARCHAR(5)                          NOT NULL,
     created_date          TIMESTAMP default CURRENT_TIMESTAMP NOT NULL,

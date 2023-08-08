@@ -1,6 +1,7 @@
 package com.windsor.mockbank.util;
 
 import com.windsor.mockbank.constant.Currency;
+import com.windsor.mockbank.dto.AccountRequest;
 import com.windsor.mockbank.model.Account;
 
 import java.math.BigDecimal;
@@ -10,7 +11,7 @@ import java.util.Random;
 
 public class AccountDataGenerator {
 
-    public static List<Account> generateAccount(Integer userId) {
+    public static AccountRequest generateAccount(Integer userId) {
         Random random = new Random();
         List<Account> accountList = new ArrayList<>();
 
@@ -29,6 +30,9 @@ public class AccountDataGenerator {
             accountList.add(account);
         }
 
-        return accountList;
+        AccountRequest accountRequest = new AccountRequest();
+        accountRequest.setAccountList(accountList);
+
+        return accountRequest;
     }
 }

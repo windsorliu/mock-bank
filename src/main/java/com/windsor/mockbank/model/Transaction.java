@@ -12,7 +12,7 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Transaction {
 
-    @JsonIgnore
+    @JsonProperty("transaction_id")
     private Integer transactionId;
 
     @JsonProperty("transaction_key")
