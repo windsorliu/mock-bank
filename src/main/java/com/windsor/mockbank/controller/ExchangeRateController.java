@@ -12,10 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/exchangerate")
@@ -33,11 +32,18 @@ public class ExchangeRateController {
     public ResponseEntity<ExchangeRate> updateExchangeRate() throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/USD";
-        ExchangeRate exchangeRate = restTemplate.getForObject(url, ExchangeRate.class);
 
-        if(!exchangeRate.getResult().equals("success")) {
-            log.warn("Exchange rate update failed.");
+        ExchangeRate exchangeRate;
+
+        try {
+            exchangeRate = restTemplate.getForObject(url, ExchangeRate.class);
+        } catch (HttpClientErrorException.Forbidden e) {
+            log.warn("error-type:invalid-key, Exchange rate update failed.");
+            log.warn("HttpClientErrorException.Forbidden: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            log.warn("Exception: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         Integer id = exchangeRateService.createData(exchangeRate);

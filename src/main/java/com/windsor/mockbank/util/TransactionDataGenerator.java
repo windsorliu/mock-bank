@@ -38,7 +38,7 @@ public class TransactionDataGenerator {
         // 選擇 匯款貨幣
         Currency[] currencies = Currency.values();
         Currency randomCurrency = currencies[random.nextInt(currencies.length)];
-        String currency=randomCurrency.name();
+        String currency = randomCurrency.name();
 
         // 選擇 匯款金額
         int randomInt = random.nextInt(100000) + 1;  // 交易金額範圍1~100000

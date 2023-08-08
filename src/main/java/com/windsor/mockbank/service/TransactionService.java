@@ -3,6 +3,7 @@ package com.windsor.mockbank.service;
 import com.windsor.mockbank.dao.AccountDao;
 import com.windsor.mockbank.dao.ExchangeRateDao;
 import com.windsor.mockbank.dao.TransactionDao;
+import com.windsor.mockbank.dto.TransactionQueryParams;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.model.ExchangeRate;
 import com.windsor.mockbank.model.Transaction;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -40,8 +42,8 @@ public class TransactionService {
         String remitterCurrency = remitterAccount.getCurrency();
         String transactionCurrency = transaction.getCurrency();
 
-        BigDecimal remitterRate = getRate(exchangeRate,remitterCurrency);
-        BigDecimal transactionRate = getRate(exchangeRate,transactionCurrency);
+        BigDecimal remitterRate = getRate(exchangeRate, remitterCurrency);
+        BigDecimal transactionRate = getRate(exchangeRate, transactionCurrency);
 
         // 將 匯款帳戶餘額對應調整成交易匯率
         BigDecimal remitterBalance = remitterAccount.getBalance().multiply(transactionRate).divide(remitterRate, 2, RoundingMode.HALF_EVEN);
@@ -70,9 +72,9 @@ public class TransactionService {
         // 取得 本次交易的貨幣匯率
         ExchangeRate exchangeRate = exchangeRateDao.getLatestData();
 
-        BigDecimal remitterRate = getRate(exchangeRate,remitterCurrency);
-        BigDecimal payeeRate = getRate(exchangeRate,payeeCurrency);
-        BigDecimal transactionRate =  getRate(exchangeRate,transactionCurrency);
+        BigDecimal remitterRate = getRate(exchangeRate, remitterCurrency);
+        BigDecimal payeeRate = getRate(exchangeRate, payeeCurrency);
+        BigDecimal transactionRate = getRate(exchangeRate, transactionCurrency);
 
         // 調整 匯款帳戶、收款帳戶的餘額
         BigDecimal remitterAmount = transaction.getAmount().multiply(remitterRate).divide(transactionRate, 2, RoundingMode.HALF_EVEN);
@@ -93,5 +95,21 @@ public class TransactionService {
         BigDecimal rate = new BigDecimal(number.toString());
 
         return rate;
+    }
+
+    public void isAccountExist(String accountIBAN) {
+        Account account = accountDao.getAccountByIBAN(accountIBAN);
+
+        if (account == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public List<Transaction> getTransactions(TransactionQueryParams transactionQueryParams) {
+        return transactionDao.getTransactions(transactionQueryParams);
+    }
+
+    public Integer countTransactions(String accountIBAN) {
+        return transactionDao.countTransactions(accountIBAN);
     }
 }

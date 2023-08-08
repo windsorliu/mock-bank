@@ -35,8 +35,8 @@ public class AccountService {
             // 判斷是否有該用戶存在
             User user = userDao.getUserById(accountList.get(i).getUserId());
 
-            if(user == null) {
-                log.warn("The user with user_id: {} does not exist",accountList.get(i).getUserId());
+            if (user == null) {
+                log.warn("The user with user_id: {} does not exist", accountList.get(i).getUserId());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
 

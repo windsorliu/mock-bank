@@ -6,7 +6,6 @@ import com.windsor.mockbank.model.Transaction;
 import com.windsor.mockbank.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-
 import org.springframework.stereotype.Service;
 
 @Service

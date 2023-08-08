@@ -27,7 +27,7 @@ public class ExchangeRateService {
         exchangeRate.setTimeNextUpdateUtc(nextUpdateGMTPlus8);
 
         // 將conversion_rates轉換成json格式
-        String conversionRatesJson= objectMapper.writeValueAsString(exchangeRate.getConversionRates());
+        String conversionRatesJson = objectMapper.writeValueAsString(exchangeRate.getConversionRates());
 
         return exchangeRateDao.createData(exchangeRate, conversionRatesJson);
     }

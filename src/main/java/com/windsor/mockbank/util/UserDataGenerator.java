@@ -2,7 +2,6 @@ package com.windsor.mockbank.util;
 
 import com.github.javafaker.Faker;
 import com.windsor.mockbank.dto.UserRequest;
-import com.windsor.mockbank.model.User;
 
 import java.security.SecureRandom;
 import java.util.Base64;

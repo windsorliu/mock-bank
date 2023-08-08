@@ -59,6 +59,19 @@ public class AccountDao {
         return accountList.get(0);
     }
 
+    public List<Account> getAccountsByUserId(Integer userId) {
+        String sql = "SELECT account_id, account_IBAN, user_id, currency, " +
+                "balance, created_date, last_modified_date " +
+                "FROM account WHERE user_id = :user_id";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id", userId);
+
+        List<Account> accountList = namedParameterJdbcTemplate.query(sql, map, new AccountRowMapper());
+
+        return accountList;
+    }
+
     public List<Integer> getAccountIdList() {
         String sql = "SELECT account_id FROM account";
 
