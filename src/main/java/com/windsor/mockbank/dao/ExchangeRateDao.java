@@ -54,7 +54,6 @@ public class ExchangeRateDao {
     }
 
     public ExchangeRate getData(Integer id) {
-
         String sql = "SELECT id, result, documentation, terms_of_use, " +
                 "time_last_update_unix, time_last_update_utc, " +
                 "time_next_update_unix, time_next_update_utc, " +
@@ -67,7 +66,24 @@ public class ExchangeRateDao {
         List<ExchangeRate> exchangeRateList = namedParameterJdbcTemplate.query(sql, map, new ExchangeRateRowMapper());
 
         if (exchangeRateList.isEmpty()) {
-            log.warn("Failed to write ExchangeRate");
+            return null;
+        } else {
+            return exchangeRateList.get(0);
+        }
+    }
+
+    public ExchangeRate getLatestData() {
+        String sql = "SELECT id, result, documentation, terms_of_use, " +
+                "time_last_update_unix, time_last_update_utc, " +
+                "time_next_update_unix, time_next_update_utc, " +
+                "base_code, conversion_rates " +
+                "FROM exchange_rate ORDER BY time_last_update_unix DESC LIMIT 1";
+
+        Map<String, Object> map = new HashMap<>();
+
+        List<ExchangeRate> exchangeRateList = namedParameterJdbcTemplate.query(sql, map, new ExchangeRateRowMapper());
+
+        if (exchangeRateList.isEmpty()) {
             return null;
         } else {
             return exchangeRateList.get(0);

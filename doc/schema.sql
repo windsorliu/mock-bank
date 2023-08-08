@@ -32,16 +32,17 @@ CREATE TABLE account
 
 CREATE TABLE transaction
 (
-    transaction_id   INT AUTO_INCREMENT PRIMARY KEY,
-    transaction_key  VARCHAR(50)                         NOT NULL UNIQUE KEY,
-    user_id          INT                                 NOT NULL,
-    account_id       INT                                 NOT NULL,
-    amount_value     DECIMAL(12, 2)                      NOT NULL,
-    amount_currency  VARCHAR(5)                          NOT NULL,
-    transaction_date TIMESTAMP default CURRENT_TIMESTAMP NOT NULL,
-    description      VARCHAR(100),
-    INDEX            idx_user_id (user_id),
-    INDEX            idx_account_id (account_id)
+    transaction_id        INT AUTO_INCREMENT PRIMARY KEY,
+    transaction_key       VARCHAR(50)                         NOT NULL UNIQUE KEY,
+    remitter_account_IBAN VARCHAR(50)                         NOT NULL,
+    payee_account_IBAN    VARCHAR(50)                         NOT NULL,
+    amount                DECIMAL(12, 2)                      NOT NULL,
+    currency              VARCHAR(5)                          NOT NULL,
+    created_date          TIMESTAMP default CURRENT_TIMESTAMP NOT NULL,
+    last_modified_date    TIMESTAMP default CURRENT_TIMESTAMP NOT NULL on update CURRENT_TIMESTAMP,
+    description           VARCHAR(100),
+    INDEX                 idx_remitter_account_IBAN (remitter_account_IBAN),
+    INDEX                 idx_payee_account_IBAN (payee_account_IBAN)
 );
 
 -- Exchange_Rate
@@ -57,5 +58,6 @@ CREATE TABLE exchange_rate
     time_next_update_unix BIGINT       NOT NULL,
     time_next_update_utc  VARCHAR(100) NOT NULL,
     base_code             VARCHAR(5)   NOT NULL,
-    conversion_rates      JSON         NOT NULL
+    conversion_rates      JSON         NOT NULL,
+    INDEX                 idx_time_last_update_unix (time_last_update_unix)
 );

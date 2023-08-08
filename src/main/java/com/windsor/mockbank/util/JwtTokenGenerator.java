@@ -15,12 +15,12 @@ public class JwtTokenGenerator {
     private static final long EXPIRATION_TIME = 7200000; // Token 過期时间 (2 小時)
     private static final Logger log = LoggerFactory.getLogger(JwtTokenGenerator.class);
 
-    public static String generateJwtToken(String userId) {
+    public static String generateJwtToken(String userKey) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
 
         String token = Jwts.builder()
-                .setSubject(userId)
+                .setSubject(userKey)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SECRET_KEY)

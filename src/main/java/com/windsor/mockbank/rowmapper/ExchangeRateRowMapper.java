@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsor.mockbank.model.ExchangeRate;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class ExchangeRateRowMapper implements RowMapper<ExchangeRate> {
         exchangeRate.setTimeNextUpdateUtc(resultSet.getString("time_next_update_utc"));
         exchangeRate.setBaseCode(resultSet.getString("base_code"));
 
-        Map<String, Object> conversionRates;
+        Map<String, BigDecimal> conversionRates;
 
         try {
             conversionRates = objectMapper.readValue(
