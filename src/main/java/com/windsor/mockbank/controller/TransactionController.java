@@ -19,8 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/transactions")
 public class TransactionController {
 
-    private final static Logger log = LoggerFactory.getLogger(TransactionController.class);
-
     @Autowired
     private KafkaProducer kafkaProducer;
     

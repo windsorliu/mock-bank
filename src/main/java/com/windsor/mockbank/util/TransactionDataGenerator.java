@@ -1,6 +1,5 @@
 package com.windsor.mockbank.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.windsor.mockbank.constant.Currency;
 import com.windsor.mockbank.dao.AccountDao;
 import com.windsor.mockbank.model.Account;
@@ -17,7 +16,7 @@ public class TransactionDataGenerator {
     @Autowired
     private AccountDao accountDao;
 
-    public Transaction generateTransaction() throws JsonProcessingException {
+    public Transaction generateTransaction() {
         // 選擇 匯款人(remitter) 和 收款人(payee) 帳戶
         List<Integer> AccountIdList = accountDao.getAccountIdList();
         Random random = new Random();
