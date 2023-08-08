@@ -37,6 +37,13 @@ public class UserDao {
         return getUser(sql, "email", email);
     }
 
+    public User getUserByKey(String userKey) {
+        String sql = "SELECT user_id, user_key, token, email, password, created_date, last_modified_date " +
+                "FROM user WHERE user_key = :user_key";
+
+        return getUser(sql, "user_key", userKey);
+    }
+
     private User getUser(String sql, String key, Object value) {
         Map<String, Object> map = new HashMap<>();
         map.put(key, value);

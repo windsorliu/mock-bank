@@ -1,7 +1,9 @@
 package com.windsor.mockbank.service;
 
+import com.windsor.mockbank.dao.AccountDao;
 import com.windsor.mockbank.dao.UserDao;
 import com.windsor.mockbank.dto.UserRequest;
+import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.model.User;
 import com.windsor.mockbank.util.JwtTokenGenerator;
 import com.windsor.mockbank.util.UniqueIdentifierGenerator;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -19,6 +23,9 @@ public class UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private AccountDao accountDao;
 
     public User getUserById(Integer id) {
         return userDao.getUserById(id);
@@ -58,8 +65,22 @@ public class UserService {
         if (userRequest.getPassword().equals(userCheck.getPassword())) {
             return userCheck;
         } else {
-            log.warn("email: {} wrong password", userRequest.getEmail());
+            log.warn("The email: {} wrong password", userRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    public List<Account> getAccountsByUserKey(String userKey) {
+        User userCheck = userDao.getUserByKey(userKey);
+
+        // 檢查user是否存在
+        if (userCheck == null) {
+            log.warn("The user: {} does not exist", userKey);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        List<Account> accountList = accountDao.getAccountsByUserId(userCheck.getUserId());
+
+        return accountList;
     }
 }

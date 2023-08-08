@@ -40,8 +40,8 @@ public class TransactionService {
         String remitterCurrency = remitterAccount.getCurrency();
         String transactionCurrency = transaction.getCurrency();
 
-        BigDecimal remitterRate = getRate(exchangeRate,remitterCurrency);
-        BigDecimal transactionRate = getRate(exchangeRate,transactionCurrency);
+        BigDecimal remitterRate = getRate(exchangeRate, remitterCurrency);
+        BigDecimal transactionRate = getRate(exchangeRate, transactionCurrency);
 
         // 將 匯款帳戶餘額對應調整成交易匯率
         BigDecimal remitterBalance = remitterAccount.getBalance().multiply(transactionRate).divide(remitterRate, 2, RoundingMode.HALF_EVEN);
@@ -70,9 +70,9 @@ public class TransactionService {
         // 取得 本次交易的貨幣匯率
         ExchangeRate exchangeRate = exchangeRateDao.getLatestData();
 
-        BigDecimal remitterRate = getRate(exchangeRate,remitterCurrency);
-        BigDecimal payeeRate = getRate(exchangeRate,payeeCurrency);
-        BigDecimal transactionRate =  getRate(exchangeRate,transactionCurrency);
+        BigDecimal remitterRate = getRate(exchangeRate, remitterCurrency);
+        BigDecimal payeeRate = getRate(exchangeRate, payeeCurrency);
+        BigDecimal transactionRate = getRate(exchangeRate, transactionCurrency);
 
         // 調整 匯款帳戶、收款帳戶的餘額
         BigDecimal remitterAmount = transaction.getAmount().multiply(remitterRate).divide(transactionRate, 2, RoundingMode.HALF_EVEN);

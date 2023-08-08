@@ -73,22 +73,6 @@ public class Application {
         }
     }
 
-    private <T> ResponseEntity<T> callApi(String url, Object requestBody, Class<T> responseType) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> requestEntity = new HttpEntity<>(requestBody, headers);
-
-        ResponseEntity<T> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                requestEntity,
-                responseType
-        );
-
-        return response;
-    }
-
     @Scheduled(fixedRate = 10000) // Call Transaction API every 10 seconds
     public void callTransactionApi() throws JsonProcessingException {
         if (running) {
@@ -129,7 +113,7 @@ public class Application {
                     // 當遠端 API 回傳 401 Unauthorized 時的處理
                     // 更新token，準備進行重試
                     token = JwtTokenGenerator.generateJwtToken(remitterUser.getUserKey());
-                    log.info("Generating a new token for user: {}",remitterUser.getUserKey());
+                    log.info("Generating a new token for user: {}", remitterUser.getUserKey());
                     HttpHeaders newHeader = new HttpHeaders();
                     newHeader.set("Authorization", token);
                     newHeader.setContentType(MediaType.APPLICATION_JSON);
@@ -143,7 +127,7 @@ public class Application {
             // 如果有新生成token，更新至mysql中
             if (retryCount != 0) {
                 userDao.updateToken(remitterUser.getUserId(), token);
-                log.info("The token for user: {} has been updated.",remitterUser.getUserKey());
+                log.info("The token for user: {} has been updated.", remitterUser.getUserKey());
             }
 
             if (resultTransaction == null) {
@@ -165,6 +149,5 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        System.out.println(JwtTokenGenerator.generateJwtToken("P-1beca701f3"));
     }
 }

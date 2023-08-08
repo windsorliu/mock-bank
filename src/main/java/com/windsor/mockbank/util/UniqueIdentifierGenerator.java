@@ -36,7 +36,7 @@ public class UniqueIdentifierGenerator {
 
         return userKey;
     }
-    
+
     public static String generateAccountIBAN() {
         // 生成UUID
         UUID uuid = UUID.randomUUID();
