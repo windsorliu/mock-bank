@@ -3,6 +3,7 @@ package com.windsor.mockbank.service;
 import com.windsor.mockbank.dao.AccountDao;
 import com.windsor.mockbank.dao.ExchangeRateDao;
 import com.windsor.mockbank.dao.TransactionDao;
+import com.windsor.mockbank.dto.TransactionQueryParams;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.model.ExchangeRate;
 import com.windsor.mockbank.model.Transaction;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -93,5 +95,21 @@ public class TransactionService {
         BigDecimal rate = new BigDecimal(number.toString());
 
         return rate;
+    }
+
+    public void isAccountExist(String accountIBAN) {
+        Account account = accountDao.getAccountByIBAN(accountIBAN);
+
+        if (account == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public List<Transaction> getTransactions(TransactionQueryParams transactionQueryParams) {
+        return transactionDao.getTransactions(transactionQueryParams);
+    }
+
+    public Integer countTransactions(String accountIBAN) {
+        return transactionDao.countTransactions(accountIBAN);
     }
 }
