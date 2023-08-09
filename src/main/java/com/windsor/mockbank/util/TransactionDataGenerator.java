@@ -2,8 +2,8 @@ package com.windsor.mockbank.util;
 
 import com.windsor.mockbank.constant.Currency;
 import com.windsor.mockbank.dao.AccountDao;
+import com.windsor.mockbank.dto.TransactionRequest;
 import com.windsor.mockbank.model.Account;
-import com.windsor.mockbank.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class TransactionDataGenerator {
     @Autowired
     private AccountDao accountDao;
 
-    public Transaction generateTransaction() {
+    public TransactionRequest generateTransaction() {
         // 選擇 匯款人(remitter) 和 收款人(payee) 帳戶
         List<Integer> AccountIdList = accountDao.getAccountIdList();
         Random random = new Random();
@@ -45,12 +45,12 @@ public class TransactionDataGenerator {
         BigDecimal amount = BigDecimal.valueOf(randomInt);
 
         // 創建transaction資訊
-        Transaction transaction = new Transaction();
-        transaction.setRemitterAccountIBAN(remitterAccount.getAccountIBAN());
-        transaction.setPayeeAccountIBAN(payeeAccount.getAccountIBAN());
-        transaction.setAmount(amount);
-        transaction.setCurrency(currency);
+        TransactionRequest transactionRequest = new TransactionRequest();
+        transactionRequest.setRemitterAccountIBAN(remitterAccount.getAccountIBAN());
+        transactionRequest.setPayeeAccountIBAN(payeeAccount.getAccountIBAN());
+        transactionRequest.setAmount(amount);
+        transactionRequest.setCurrency(currency);
 
-        return transaction;
+        return transactionRequest;
     }
 }

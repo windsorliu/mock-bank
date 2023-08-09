@@ -2,6 +2,7 @@ package com.windsor.mockbank.service;
 
 import com.windsor.mockbank.dao.AccountDao;
 import com.windsor.mockbank.dao.UserDao;
+import com.windsor.mockbank.dto.AccountRequest;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.model.User;
 import com.windsor.mockbank.util.UniqueIdentifierGenerator;
@@ -26,27 +27,27 @@ public class AccountService {
     @Autowired
     private UserDao userDao;
 
-    public List<Account> createAccounts(List<Account> accountList) {
+    public List<Account> createAccounts(List<AccountRequest> accountRequestList) {
 
-        List<Account> accountResponseList = new ArrayList<>();
+        List<Account> accountList = new ArrayList<>();
 
-        for (int i = 0; i < accountList.size(); i++) {
+        for (int i = 0; i < accountRequestList.size(); i++) {
 
             // 判斷是否有該用戶存在
-            User user = userDao.getUserById(accountList.get(i).getUserId());
+            User user = userDao.getUserById(accountRequestList.get(i).getUserId());
 
             if (user == null) {
-                log.warn("The user with user_id: {} does not exist", accountList.get(i).getUserId());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                log.warn("The user with user_id: {} does not exist", accountRequestList.get(i).getUserId());
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
 
-            accountList.get(i).setAccountIBAN(UniqueIdentifierGenerator.generateAccountIBAN());
+            String accountIBAN = UniqueIdentifierGenerator.generateAccountIBAN();
 
-            Integer accountId = accountDao.createAccount(accountList.get(i));
+            Integer accountId = accountDao.createAccount(accountRequestList.get(i), accountIBAN);
             Account account = accountDao.getAccountById(accountId);
-            accountResponseList.add(account);
+            accountList.add(account);
         }
 
-        return accountResponseList;
+        return accountList;
     }
 }

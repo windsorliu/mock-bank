@@ -34,8 +34,7 @@ git clone https://github.com/windsorliu/mock-bank.git
 
 #### 安裝Java
 
-本專案使用Java OpenJDK: 17.0.7，因為Spring Boot版本在3.x版後只支援Java 17以後的版本  
-可以參考這些資料進行安裝
+本專案使用Java OpenJDK: 17.0.7，可以參考這些資料進行安裝
 
 - [OpenJDK download](https://jdk.java.net/java-se-ri/17)
 - [Download and Install OpenJDK 17](https://www.youtube.com/watch?v=RqIyua9BFQY)

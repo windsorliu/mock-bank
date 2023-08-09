@@ -3,6 +3,7 @@ package com.windsor.mockbank;
 import com.windsor.mockbank.dao.AccountDao;
 import com.windsor.mockbank.dao.UserDao;
 import com.windsor.mockbank.dto.AccountRequest;
+import com.windsor.mockbank.dto.TransactionRequest;
 import com.windsor.mockbank.dto.UserRequest;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.model.Transaction;
@@ -11,6 +12,7 @@ import com.windsor.mockbank.util.AccountDataGenerator;
 import com.windsor.mockbank.util.JwtTokenGenerator;
 import com.windsor.mockbank.util.TransactionDataGenerator;
 import com.windsor.mockbank.util.UserDataGenerator;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
@@ -43,16 +47,18 @@ public class Application {
     @Autowired
     private AccountDao accountDao;
 
+    @Operation(summary = "Stopping the transaction simulation program")
     @GetMapping("/stop")
     public void stop() {
         running = false;
-        log.info("Stopping the transaction simulation program...");
+        log.info("Stopping the transaction simulation program");
     }
 
+    @Operation(summary = "Starting the transaction simulation program")
     @GetMapping("/start")
     public void start() {
         running = true;
-        log.info("Starting the transaction simulation program...");
+        log.info("Starting the transaction simulation program");
     }
 
     @Scheduled(fixedRate = 5000) // Call User API every 5 seconds
@@ -66,9 +72,9 @@ public class Application {
                     userRequest, User.class);
 
             //Call Account API and generate accounts
-            AccountRequest accountRequest = AccountDataGenerator.generateAccount(user.getUserId());
+            List<AccountRequest> accountRequestList = AccountDataGenerator.generateAccount(user.getUserId());
             restTemplate.postForObject("http://localhost:8080/api/accounts",
-                    accountRequest, Void.class);
+                    accountRequestList, Void.class);
         }
     }
 
@@ -76,7 +82,7 @@ public class Application {
     public void callTransactionApi() {
         if (running) {
 
-            Transaction requestBody = transactionDataGenerator.generateTransaction();
+            TransactionRequest requestBody = transactionDataGenerator.generateTransaction();
 
             // 把 JWT token放入Header以驗證
             Account remitterAccount = accountDao.getAccountByIBAN(requestBody.getRemitterAccountIBAN());

@@ -3,6 +3,10 @@ package com.windsor.mockbank.controller;
 import com.windsor.mockbank.dto.AccountRequest;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.service.AccountService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +19,31 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
+@Tag(name = "Account")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
+    @Operation(
+            summary = "Create one or more accounts",
+            responses = {
+                    @ApiResponse(
+                            description = "Created",
+                            responseCode = "201"
+                    ),
+                    @ApiResponse(
+                            description = "The user does not exist",
+                            responseCode = "404",
+                            content = @Content
+                    )
+            }
+    )
     @PostMapping
-    public ResponseEntity<AccountRequest> createAccounts(@RequestBody AccountRequest requestBody) {
-        AccountRequest accountRequest = new AccountRequest();
-        List<Account> accountResponseList = accountService.createAccounts(requestBody.getAccountList());
+    public ResponseEntity<List<Account>> createAccounts(@RequestBody List<AccountRequest> accountRequestList) {
 
-        accountRequest.setAccountList(accountResponseList);
-        return ResponseEntity.status(HttpStatus.CREATED).body(accountRequest);
+        List<Account> accountList = accountService.createAccounts(accountRequestList);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(accountList);
     }
 }

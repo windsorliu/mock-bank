@@ -58,7 +58,7 @@ public class UserService {
         // 檢查user是否存在
         if (userCheck == null) {
             log.warn("The email: {} has not been registered yet", userRequest.getEmail());
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
         // 比較密碼
