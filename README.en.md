@@ -1,5 +1,5 @@
 # Mock Bank
-[中文版本]()
+[中文版本](https://github.com/windsorliu/mock-bank/blob/main/README.md)
 
 ### Introduction
 For an e-Banking Portal you have been given the task to design and implement a reusable REST API for returning the paginated list of money account transactions created in an arbitrary calendar month for a given customer who is logged-on in the portal. For each transaction ‘page’ return the total credit and debit values at the current exchange rate (from the third-party provider). The list of transactions should be consumed from a Kafka topic. Build a Docker image out of the application and prepare the configuration for deploying it to Kubernetes / OpenShift.
@@ -58,7 +58,7 @@ This project uses MySQL: 5.7.35. To avoid version conflicts, it's recommended to
 
 ### Schema & Data
 
-You can see the schema design and data in [this link](). After starting the project, create the tables defined in `schema.sql` and insert the data from `data.sql`.
+You can see the schema design and data in [this link](https://github.com/windsorliu/mock-bank/tree/main/doc). After starting the project, create the tables defined in `schema.sql` and insert the data from `data.sql`.
 
 ### Install Kafka
 
