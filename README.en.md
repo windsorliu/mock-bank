@@ -97,7 +97,7 @@ Once you have set up your environment (Java, Kafka, MySQL) and created the neces
 
 As mentioned in [Assumptions](#assumptions), `There are approximately one hundred thousand e-banking customers, each with thousands of transactions per month.` I have implemented two APIs for simulating this amount of transactions:
 
-Start Simulation: `GET /api/application/start`
+Start Simulation: `GET /api/application/start`  
 Stop Simulation: `GET /api/application/stop`
 
 These APIs simulate banking transactions behavior:
@@ -170,7 +170,7 @@ account:  `POST /api/accounts`
 - Balance exceeding the limit of the `balance` column in the `account` table (DECIMAL(12, 2))
 
 transaction:  `POST /api/transactions`
-- Negative balance
+- Negative amount
 - Nonexistent currency
 - Nonexistent remitter account
 - Nonexistent payee account

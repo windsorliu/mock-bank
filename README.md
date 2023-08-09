@@ -173,7 +173,7 @@ account:  `POST  /api/accounts`
 - 餘額超出account table中的balance欄位的限制(DECIMAL(12, 2))
   
 transaction:  `POST  /api/transactions`  
-- 餘額為負  
+- 金額為負  
 - 貨幣不存在  
 - 不存在的匯款人帳號  
 - 不存在的收款人帳號  
