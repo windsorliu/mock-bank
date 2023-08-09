@@ -1,12 +1,21 @@
 package com.windsor.mockbank.dto;
 
-import com.windsor.mockbank.model.Account;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Data
 public class AccountRequest {
 
-    private List<Account> accountList;
+    @Schema(example = "1")
+    @JsonProperty("user_id")
+    private Integer userId;
+
+    @Schema(example = "USD")
+    private String currency;
+
+    @Schema(example = "1000")
+    private BigDecimal balance;
 }

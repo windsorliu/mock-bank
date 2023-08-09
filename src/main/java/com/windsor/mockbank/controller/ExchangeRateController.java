@@ -3,6 +3,10 @@ package com.windsor.mockbank.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.windsor.mockbank.model.ExchangeRate;
 import com.windsor.mockbank.service.ExchangeRateService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/exchangerate")
+@Tag(name = "Exchange Rate")
 public class ExchangeRateController {
 
     private final static Logger log = LoggerFactory.getLogger(ExchangeRateController.class);
@@ -28,6 +33,25 @@ public class ExchangeRateController {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
+    @Operation(
+            summary = "Update exchange rates",
+            responses = {
+                    @ApiResponse(
+                            description = "Created",
+                            responseCode = "201"
+                    ),
+                    @ApiResponse(
+                            description = "The API key from the third-party provider is invalid or incorrect",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "An unknown error occurred. Please contact the backend team for assistance",
+                            responseCode = "400",
+                            content = @Content
+                    )
+            }
+    )
     @GetMapping("/update")
     public ResponseEntity<ExchangeRate> updateExchangeRate() throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
@@ -38,7 +62,7 @@ public class ExchangeRateController {
         try {
             exchangeRate = restTemplate.getForObject(url, ExchangeRate.class);
         } catch (HttpClientErrorException.Forbidden e) {
-            log.warn("error-type:invalid-key, Exchange rate update failed.");
+            log.warn("The API key from the third-party provider is invalid or incorrect, Exchange rate update failed.");
             log.warn("HttpClientErrorException.Forbidden: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         } catch (Exception e) {
@@ -52,8 +76,23 @@ public class ExchangeRateController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(
+            summary = "Get the latest exchange rate information",
+            responses = {
+                    @ApiResponse(
+                            description = "OK",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "The exchange-rate table in the database is currently empty",
+                            responseCode = "204",
+                            content = @Content
+                    )
+            }
+    )
     @GetMapping("/latest")
-    public ExchangeRate getLatestData() {
-        return exchangeRateService.getLatestData();
+    public ResponseEntity<ExchangeRate> getLatestData() {
+        ExchangeRate response = exchangeRateService.getLatestData();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

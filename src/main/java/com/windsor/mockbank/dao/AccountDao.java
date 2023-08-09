@@ -1,5 +1,6 @@
 package com.windsor.mockbank.dao;
 
+import com.windsor.mockbank.dto.AccountRequest;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.rowmapper.AccountRowMapper;
 import org.slf4j.Logger;
@@ -93,15 +94,15 @@ public class AccountDao {
         namedParameterJdbcTemplate.update(sql, map);
     }
 
-    public Integer createAccount(Account account) {
+    public Integer createAccount(AccountRequest accountRequest, String accountIBAN) {
         String sql = "INSERT INTO account(account_IBAN, user_id, currency, balance) " +
                 "VALUE (:account_IBAN, :user_id, :currency, :balance)";
 
         Map<String, Object> map = new HashMap<>();
-        map.put("account_IBAN", account.getAccountIBAN());
-        map.put("user_id", account.getUserId());
-        map.put("currency", account.getCurrency());
-        map.put("balance", account.getBalance());
+        map.put("account_IBAN", accountIBAN);
+        map.put("user_id", accountRequest.getUserId());
+        map.put("currency", accountRequest.getCurrency());
+        map.put("balance", accountRequest.getBalance());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -109,7 +110,7 @@ public class AccountDao {
 
         Integer id = keyHolder.getKey().intValue();
 
-        log.info("Creating account_IBAN: {}", account.getAccountIBAN());
+        log.info("Creating account_IBAN: {}", accountIBAN);
 
         return id;
     }

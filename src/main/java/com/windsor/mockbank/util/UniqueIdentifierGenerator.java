@@ -8,7 +8,7 @@ public class UniqueIdentifierGenerator {
         UUID uuid = UUID.randomUUID();
         String uuidString = uuid.toString();
 
-        // 移除连字符
+        // 移除連字符
         String withoutHyphens = uuidString.replace("-", "");
 
         // 插入指定的分隔符

@@ -4,6 +4,7 @@ import com.windsor.mockbank.dao.AccountDao;
 import com.windsor.mockbank.dao.ExchangeRateDao;
 import com.windsor.mockbank.dao.TransactionDao;
 import com.windsor.mockbank.dto.TransactionQueryParams;
+import com.windsor.mockbank.dto.TransactionRequest;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.model.ExchangeRate;
 import com.windsor.mockbank.model.Transaction;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -34,13 +36,13 @@ public class TransactionService {
     @Autowired
     private ExchangeRateDao exchangeRateDao;
 
-    public String getTransactionKey(Transaction transaction) {
+    public String getTransactionKey(TransactionRequest transactionRequest) {
         // 取得 匯款帳戶貨幣 與 交易貨幣 的 匯率
-        Account remitterAccount = accountDao.getAccountByIBAN(transaction.getRemitterAccountIBAN());
+        Account remitterAccount = accountDao.getAccountByIBAN(transactionRequest.getRemitterAccountIBAN());
         ExchangeRate exchangeRate = exchangeRateDao.getLatestData();
 
         String remitterCurrency = remitterAccount.getCurrency();
-        String transactionCurrency = transaction.getCurrency();
+        String transactionCurrency = transactionRequest.getCurrency();
 
         BigDecimal remitterRate = getRate(exchangeRate, remitterCurrency);
         BigDecimal transactionRate = getRate(exchangeRate, transactionCurrency);
@@ -49,16 +51,17 @@ public class TransactionService {
         BigDecimal remitterBalance = remitterAccount.getBalance().multiply(transactionRate).divide(remitterRate, 2, RoundingMode.HALF_EVEN);
 
         // 如果餘額小於這次的交易金額
-        if (remitterBalance.compareTo(transaction.getAmount()) < 0) {
-            log.warn("The account: {} does not have sufficient balance for the transaction"
+        if (remitterBalance.compareTo(transactionRequest.getAmount()) < 0) {
+            log.warn("The remitter account: {} does not have sufficient balance for the transaction"
                     , remitterAccount.getAccountIBAN());
 
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         return UniqueIdentifierGenerator.generateTransactionKey();
     }
 
+    @Transactional
     public void createTransaction(Transaction transaction) {
         // 取得 匯款帳戶、收款帳戶
         Account remitterAccount = accountDao.getAccountByIBAN(transaction.getRemitterAccountIBAN());
