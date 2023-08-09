@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -59,6 +60,7 @@ public class TransactionService {
         return UniqueIdentifierGenerator.generateTransactionKey();
     }
 
+    @Transactional
     public void createTransaction(Transaction transaction) {
         // 取得 匯款帳戶、收款帳戶
         Account remitterAccount = accountDao.getAccountByIBAN(transaction.getRemitterAccountIBAN());

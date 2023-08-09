@@ -1,6 +1,5 @@
 package com.windsor.mockbank;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.windsor.mockbank.dao.AccountDao;
 import com.windsor.mockbank.dao.UserDao;
 import com.windsor.mockbank.dto.AccountRequest;
@@ -74,7 +73,7 @@ public class Application {
     }
 
     @Scheduled(fixedRate = 10000) // Call Transaction API every 10 seconds
-    public void callTransactionApi() throws JsonProcessingException {
+    public void callTransactionApi() {
         if (running) {
 
             Transaction requestBody = transactionDataGenerator.generateTransaction();
