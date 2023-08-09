@@ -11,7 +11,7 @@ import java.util.Date;
 public class JwtTokenGenerator {
 
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    private static final long EXPIRATION_TIME = 7200000; // Token 過期时间 (2 小時)
+    private static final long EXPIRATION_TIME = 7200000; // Token 過期時間 (2 小時)
     private static final Logger log = LoggerFactory.getLogger(JwtTokenGenerator.class);
 
     public static String generateJwtToken(String userKey) {
