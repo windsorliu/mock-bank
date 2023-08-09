@@ -42,7 +42,7 @@ git clone https://github.com/windsorliu/mock-bank.git
 ### 安裝MySQL
 
 本專案使用 MySQL: 5.7.35，為避免版本差異問題，建議安裝相同版本  
-若您選擇了別的版本，請記得修改pom.xml中的配置：
+若您選擇了別的版本，請記得修改`pom.xml`中的配置：
 
 ```xml
 <dependency>
@@ -55,11 +55,11 @@ git clone https://github.com/windsorliu/mock-bank.git
 - 到[這裡](https://downloads.mysql.com/archives/installer/)點擊5.7.35版，並點擊mysql-installer-community-5.7.35.0.msi(527.8M)的下載
 - 參考[此影片](https://www.youtube.com/watch?v=GwHpIl0vqY4)開始下載
 - 如果你的IDE可以支援連接資料庫的功能(e.g. IntelliJ IDEA)，在 *Choosing a Setup Type* 可以選擇 Server only
-- *Accounts and Roles* 輸入密碼，並記錄下來(建議設計為:casio2988lw201，和application.properties中的參數一樣)
+- *Accounts and Roles* 輸入密碼，並記錄下來(建議設計為:casio2988lw201，和`application.properties`中的參數一樣)
 
 ### Schema & Data
   
-你可以在[這裡]()看到資料庫設計的schema以及data，啟動專案後，請先創建schema.sql中的table，並創建data.sql中的資料
+你可以在[這裡]()看到資料庫設計的schema以及data，啟動專案後，請先創建`schema.sql`中的table，並創建`data.sql`中的資料
 
 ### 安裝Kafka
   
@@ -90,14 +90,14 @@ git clone https://github.com/windsorliu/mock-bank.git
 
 ### 啟動專案
 
-當你配置好了環境(Java,Kafka,MySQL)，且已經執行了schema.sql與data.sql創建了需要的資料，我們可以開始調用API  
+當你配置好了環境(Java,Kafka,MySQL)，且已經執行了`schema.sql`與`data.sql`創建了需要的資料，我們可以開始調用API  
   
-> 請注意，當你要調用transaction API的功能前(以及稍後會介紹的自動模擬交易功能前)，要先確保exchange-rate table中有匯率資料，也就是需先調用exchange-rate API: `GET  /api/exchangerate/update`
+> 請注意，當你要調用transaction API的功能前(以及稍後會介紹的自動模擬交易功能前)，要先確保`exchange-rate` table中有匯率資料，也就是需先調用`exchange-rate` API: `GET  /api/exchangerate/update`
 
 ### 自動模擬交易
 
 因為在[Assumptions](#assumptions)中有提及`There are approximately one hundred thousand e-banking customers, each with a couple thousands of transactions per month.`  
-我想模擬出這樣的交易量，所以我在Application中設置了兩個API：
+我想模擬出這樣的交易量，所以我在`Application`中設置了兩個API：
 
 啟動功能： `GET  /api/application/start`  
 關閉功能： `GET  /api/application/stop`  
@@ -106,7 +106,7 @@ git clone https://github.com/windsorliu/mock-bank.git
 - 銀行創建user與account  (每5秒創建)
 - 使用者交易  (每10秒創建)
 - 調用第三方匯率API以更新當前匯率  (每70分鐘創建)
-> 第三方匯率我使用[這個服務](https://www.exchangerate-api.com/)，到8/23之前可以調用30000次API(Pro plan)，之後一個月能調用1500次(Free plan)，api.key我儲存在application.properties
+> 第三方匯率我使用[這個服務](https://www.exchangerate-api.com/)，到8/23之前可以調用30000次API(Pro plan)，之後一個月能調用1500次(Free plan)，API key我儲存在`application.properties`
 
 為了方便測試，mysql資料庫儲存 *原始密碼*，當我們要調用user API做登入時可以直接輸入原始密碼登入
 
@@ -134,11 +134,11 @@ git clone https://github.com/windsorliu/mock-bank.git
   - 從Kafka Consumer 接收資料
 - 查詢特定帳戶的所有交易
   - 檢查帳戶是否存在  
-  - 可分頁返回交易資訊
+  - 可以分頁返回交易資訊
 
 #### Exchange Rate
 - 取得第三方匯率資料
-  - 將時區設為GMT+8，時間格式調整為 yyyy-MM-dd HH:mm:ss 的方式存入資料庫
+  - 將時區設為`GMT+8`，時間格式調整為`yyyy-MM-dd HH:mm:ss`的方式存入資料庫
 - 取得資料庫中最新的匯率資料
 
 #### Util
@@ -159,7 +159,7 @@ git clone https://github.com/windsorliu/mock-bank.git
 
 ### 設計決策
 
-- 我使用GMT+8作為時區，時間格式為yyyy-MM-dd HH:mm:ss，第三方匯率API的時間資料會先處理過才存進資料庫
+- 我使用`GMT+8`作為時區，時間格式為`yyyy-MM-dd HH:mm:ss`，第三方匯率API的時間資料會先處理過才存進資料庫
 - 基於效能與日後可能有的複雜查詢考量，我使用Spring JDBC而不是Spring Data JPA去串接資料庫
 - [Assumptions](#assumptions)中有提及`The user is already authenticated and the API client invoking the transaction API will send a JWT token containing the user’s unique identity key` ，
 目前專案只有在調用transaction API: `POST  /api/transactions` 才需要做JWT token驗證
@@ -167,14 +167,12 @@ git clone https://github.com/windsorliu/mock-bank.git
 - 目前這些API在被調用時並不會捕捉以下的錯誤情況：
 
 ```markdown
-account:
-createAccounts: `POST  /api/accounts`  
+account:  `POST  /api/accounts`  
 - 不存在的貨幣  
 - 餘額為負  
 - 餘額超出account table中的balance欄位的限制(DECIMAL(12, 2))
   
-transaction:  
-createTransaction: `POST  /api/transactions`  
+transaction:  `POST  /api/transactions`  
 - 餘額為負  
 - 貨幣不存在  
 - 不存在的匯款人帳號  
@@ -185,5 +183,5 @@ createTransaction: `POST  /api/transactions`
 ### 專案後期改進
   
 - 使用Spring Security去保護每個API端點，創建User和Admin等角色，調整每個API可以被調用的權限
-- 針對每個功能的Controller層去使用MockMvc去做單元測試(因為時間問題所以沒有完成)
-- 使用Docker, Kubernetes, CircleCI等技術部屬專案
+- 針對每個功能的Controller層去使用MockMvc去做單元測試(因為時間問題，尚未完成)
+- 使用Docker, Kubernetes, CircleCI等技術部署專案
