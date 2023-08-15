@@ -109,7 +109,7 @@ git clone https://github.com/windsorliu/mock-bank.git
 > 第三方匯率我使用[這個服務](https://www.exchangerate-api.com/)，到8/23之前可以調用30000次API(Pro plan)，之後一個月能調用1500次(Free plan)，API key我儲存在`application.properties`
 
 為了方便測試，mysql資料庫儲存 *原始密碼*，當我們要調用user API做登入時可以直接輸入原始密碼登入  
-> 20230816 備註：在[security-ApplicationConfig]()中使用BCryptPasswordEncoder加密密碼
+> 20230816備註：在[security-ApplicationConfig](https://github.com/windsorliu/mock-bank/blob/security/src/main/java/com/windsor/mockbank/config/ApplicationConfig.java)中使用BCryptPasswordEncoder加密密碼
 
 ### 程式說明
 #### User
@@ -164,7 +164,7 @@ git clone https://github.com/windsorliu/mock-bank.git
 - 基於效能與日後可能有的複雜查詢考量，我使用Spring JDBC而不是Spring Data JPA去串接資料庫
 - [Assumptions](#assumptions)中有提及`The user is already authenticated and the API client invoking the transaction API will send a JWT token containing the user’s unique identity key` ，
 目前專案只有在調用transaction API: `POST  /api/transactions` 才需要做JWT token驗證
-> 20230816備註：可以在[security]()分支中看到Spring Security的實作，目前進度：註冊與登入功能無須驗證，其他API調用皆需驗證JWT token(包含用戶唯一識別碼)
+> 20230816備註：可以在[security](https://github.com/windsorliu/mock-bank/tree/security)分支中看到Spring Security的實作，目前進度：註冊與登入功能無須驗證，其他API調用皆需驗證JWT token(包含用戶唯一識別碼)
 - 因為user都是被驗證過的用戶，只要是token過期了便會自動生成新的token給予該user
 - 目前這些API在被調用時並不會捕捉以下的錯誤情況：
 
@@ -185,6 +185,6 @@ transaction:  `POST  /api/transactions`
 ### 專案後期改進
   
 - 使用Spring Security去保護每個API端點，創建User和Admin等角色，調整每個API可以被調用的權限
-> 20230816備註：可以在[security]()分支中看到Spring Security的實作，目前進度：註冊與登入功能無須驗證，其他API調用皆需驗證JWT token(包含用戶唯一識別碼)
+> 20230816備註：可以在[security](https://github.com/windsorliu/mock-bank/tree/security)分支中看到Spring Security的實作，目前進度：註冊與登入功能無須驗證，其他API調用皆需驗證JWT token(包含用戶唯一識別碼)
 - 針對每個功能的Controller層去使用MockMvc去做單元測試(因為時間問題，尚未完成)
 - 使用Docker, Kubernetes, CircleCI等技術部署專案
