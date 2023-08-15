@@ -1,5 +1,5 @@
 # Mock Bank
-[中文版本](https://github.com/windsorliu/mock-bank/blob/main/README.md)
+[中文版本](https://github.com/windsorliu/mock-bank/blob/security/README.md)
 
 ### Introduction
 For an e-Banking Portal you have been given the task to design and implement a reusable REST API for returning the paginated list of money account transactions created in an arbitrary calendar month for a given customer who is logged-on in the portal. For each transaction ‘page’ return the total credit and debit values at the current exchange rate (from the third-party provider). The list of transactions should be consumed from a Kafka topic. Build a Docker image out of the application and prepare the configuration for deploying it to Kubernetes / OpenShift.
@@ -107,6 +107,7 @@ These APIs simulate banking transactions behavior:
 > I'm using [this service](https://www.exchangerate-api.com/) for third-party exchange rate data. It's free for up to 30,000 API calls per month until August 23rd (Pro plan), then 1,500 API calls per month (Free plan). The API key is stored in `application.properties`.
 
 For testing convenience, the MySQL database stores the *original passwords*. When calling the user login API, you can directly input the original password to log in.
+> Remark on August 16, 2023: Utilizing BCryptPasswordEncoder for password encryption in [security-ApplicationConfig](https://github.com/windsorliu/mock-bank/blob/security/src/main/java/com/windsor/mockbank/config/ApplicationConfig.java).
 
 ### Program Explanation
 #### User
@@ -160,6 +161,7 @@ For testing convenience, the MySQL database stores the *original passwords*. Whe
 - I use GMT+8 as the timezone and `yyyy-MM-dd HH:mm:ss` as the time format. Time data from the third-party exchange rate API is processed before being stored in the database.
 - For performance and potential complex queries in the future, I use Spring JDBC instead of Spring Data JPA to interact with the database.
 - As mentioned in [Assumptions](#assumptions), `The user is already authenticated, and the API client invoking the transaction API will send a JWT token containing the user’s unique identity key.` Currently, JWT token validation is only required when calling the transaction API: `POST /api/transactions`.
+> Remark on August 16, 2023: You can find the implementation of Spring Security in the [security](https://github.com/windsorliu/mock-bank/tree/security) branch. Current progress: SignUp and login functionalities do not require verification, while other API invocations necessitate JWT token authentication (including user unique identifiers).
 - Since users are already authenticated, when a token expires, a new token is automatically generated for the user.
 - Currently, these APIs do not capture the following error scenarios when invoked:
 
@@ -180,5 +182,6 @@ transaction:  `POST /api/transactions`
 ### Project Enhancements
 
 - Use Spring Security to protect each API endpoint, create roles such as User and Admin, and adjust the permissions for each API invocation.
+> Remark on August 16, 2023: You can find the implementation of Spring Security in the [security](https://github.com/windsorliu/mock-bank/tree/security) branch. Current progress: SignUp and login functionalities do not require verification, while other API invocations necessitate JWT token authentication (including user unique identifiers).
 - Use MockMvc for unit testing in the Controller layer for each feature (not implemented due to time constraints).
 - Deploy the project using technologies like Docker, Kubernetes, and CircleCI.
