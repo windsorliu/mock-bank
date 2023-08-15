@@ -2,9 +2,9 @@ package com.windsor.mockbank.dao;
 
 import com.windsor.mockbank.model.User;
 import com.windsor.mockbank.rowmapper.UserRowMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -16,29 +16,28 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@RequiredArgsConstructor
 public class UserDao {
 
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     private final static Logger log = LoggerFactory.getLogger(UserDao.class);
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public User getUserById(Integer id) {
-        String sql = "SELECT user_id, user_key, token, email, password, created_date, last_modified_date " +
+        String sql = "SELECT user_id, user_key, token, email, password, role, created_date, last_modified_date " +
                 "FROM user WHERE user_id = :userId";
 
         return getUser(sql, "userId", id);
     }
 
     public User getUserByEmail(String email) {
-        String sql = "SELECT user_id, user_key, token, email, password, created_date, last_modified_date " +
+        String sql = "SELECT user_id, user_key, token, email, password, role, created_date, last_modified_date " +
                 "FROM user WHERE email = :email";
 
         return getUser(sql, "email", email);
     }
 
     public User getUserByKey(String userKey) {
-        String sql = "SELECT user_id, user_key, token, email, password, created_date, last_modified_date " +
+        String sql = "SELECT user_id, user_key, token, email, password, role, created_date, last_modified_date " +
                 "FROM user WHERE user_key = :user_key";
 
         return getUser(sql, "user_key", userKey);
@@ -58,13 +57,14 @@ public class UserDao {
     }
 
     public Integer createUser(User user) {
-        String sql = "INSERT INTO user(user_key, token, email, password) VALUES (:user_key, :token, :email, :password)";
+        String sql = "INSERT INTO user(user_key, token, email, password, role) VALUES (:user_key, :token, :email, :password, :role)";
 
         Map<String, Object> map = new HashMap<>();
         map.put("user_key", user.getUserKey());
         map.put("token", user.getToken());
         map.put("email", user.getEmail());
         map.put("password", user.getPassword());
+        map.put("role", user.getRole().name());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 

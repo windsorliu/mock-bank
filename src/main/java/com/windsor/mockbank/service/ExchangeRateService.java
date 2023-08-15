@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsor.mockbank.dao.ExchangeRateDao;
 import com.windsor.mockbank.model.ExchangeRate;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,10 +14,10 @@ import java.util.Date;
 import java.util.TimeZone;
 
 @Service
+@RequiredArgsConstructor
 public class ExchangeRateService {
 
-    @Autowired
-    private ExchangeRateDao exchangeRateDao;
+    private final ExchangeRateDao exchangeRateDao;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public Integer createData(ExchangeRate exchangeRate) throws JsonProcessingException {

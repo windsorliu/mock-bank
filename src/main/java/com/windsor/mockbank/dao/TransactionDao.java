@@ -3,9 +3,9 @@ package com.windsor.mockbank.dao;
 import com.windsor.mockbank.dto.TransactionQueryParams;
 import com.windsor.mockbank.model.Transaction;
 import com.windsor.mockbank.rowmapper.TransactionRowMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -14,12 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@RequiredArgsConstructor
 public class TransactionDao {
 
     private final static Logger log = LoggerFactory.getLogger(TransactionDao.class);
-
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public void createTransaction(Transaction transaction) {
         String sql = "INSERT INTO transaction (transaction_key, remitter_account_IBAN, " +

@@ -1,5 +1,6 @@
 package com.windsor.mockbank.rowmapper;
 
+import com.windsor.mockbank.constant.Role;
 import com.windsor.mockbank.model.User;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -16,6 +17,7 @@ public class UserRowMapper implements RowMapper<User> {
         user.setToken(resultSet.getString("token"));
         user.setEmail(resultSet.getString("email"));
         user.setPassword(resultSet.getString("password"));
+        user.setRole(Role.valueOf(resultSet.getString("role")));
         user.setCreatedDate(resultSet.getTimestamp("created_date"));
         user.setLastModifiedDate(resultSet.getTimestamp("last_modified_date"));
 

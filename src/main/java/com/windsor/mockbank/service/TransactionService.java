@@ -9,9 +9,9 @@ import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.model.ExchangeRate;
 import com.windsor.mockbank.model.Transaction;
 import com.windsor.mockbank.util.UniqueIdentifierGenerator;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,18 +23,13 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionService {
 
     private final static Logger log = LoggerFactory.getLogger(TransactionService.class);
-
-    @Autowired
-    private TransactionDao transactionDao;
-
-    @Autowired
-    private AccountDao accountDao;
-
-    @Autowired
-    private ExchangeRateDao exchangeRateDao;
+    private final TransactionDao transactionDao;
+    private final AccountDao accountDao;
+    private final ExchangeRateDao exchangeRateDao;
 
     public String getTransactionKey(TransactionRequest transactionRequest) {
         // 取得 匯款帳戶貨幣 與 交易貨幣 的 匯率

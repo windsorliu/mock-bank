@@ -4,7 +4,7 @@ import com.windsor.mockbank.constant.Currency;
 import com.windsor.mockbank.dao.AccountDao;
 import com.windsor.mockbank.dto.TransactionRequest;
 import com.windsor.mockbank.model.Account;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,9 +12,10 @@ import java.util.List;
 import java.util.Random;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionDataGenerator {
-    @Autowired
-    private AccountDao accountDao;
+
+    private final AccountDao accountDao;
 
     public TransactionRequest generateTransaction() {
         // 選擇 匯款人(remitter) 和 收款人(payee) 帳戶

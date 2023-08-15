@@ -3,9 +3,9 @@ package com.windsor.mockbank.dao;
 import com.windsor.mockbank.dto.AccountRequest;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.rowmapper.AccountRowMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@RequiredArgsConstructor
 public class AccountDao {
 
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final static Logger log = LoggerFactory.getLogger(AccountDao.class);
 
     public Account getAccountById(Integer accountId) {

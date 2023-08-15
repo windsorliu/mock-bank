@@ -2,9 +2,9 @@ package com.windsor.mockbank.dao;
 
 import com.windsor.mockbank.model.ExchangeRate;
 import com.windsor.mockbank.rowmapper.ExchangeRateRowMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -16,12 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@RequiredArgsConstructor
 public class ExchangeRateDao {
 
     private final static Logger log = LoggerFactory.getLogger(ExchangeRateDao.class);
-
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public Integer createData(ExchangeRate exchangeRate, String conversionRatesJson) {
         String sql = "INSERT INTO exchange_rate(result, documentation, terms_of_use, " +

@@ -13,9 +13,9 @@ import com.windsor.mockbank.util.JwtTokenGenerator;
 import com.windsor.mockbank.util.TransactionDataGenerator;
 import com.windsor.mockbank.util.UserDataGenerator;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.*;
@@ -33,19 +33,14 @@ import java.util.List;
 @EnableScheduling
 @RestController
 @RequestMapping("/api/application")
+@RequiredArgsConstructor
 public class Application {
 
     private final static Logger log = LoggerFactory.getLogger(Application.class);
     private volatile boolean running = false;
-
-    @Autowired
-    private TransactionDataGenerator transactionDataGenerator;
-
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private AccountDao accountDao;
+    private final TransactionDataGenerator transactionDataGenerator;
+    private final UserDao userDao;
+    private final AccountDao accountDao;
 
     @Operation(summary = "Stopping the transaction simulation program")
     @GetMapping("/stop")

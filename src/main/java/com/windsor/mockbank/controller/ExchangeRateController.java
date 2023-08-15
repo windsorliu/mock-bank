@@ -7,9 +7,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/api/exchangerate")
 @Tag(name = "Exchange Rate")
+@RequiredArgsConstructor
 public class ExchangeRateController {
 
     private final static Logger log = LoggerFactory.getLogger(ExchangeRateController.class);
@@ -30,8 +31,7 @@ public class ExchangeRateController {
     @Value("${api.key}")
     private String apiKey;
 
-    @Autowired
-    private ExchangeRateService exchangeRateService;
+    private final ExchangeRateService exchangeRateService;
 
     @Operation(
             summary = "Update exchange rates",

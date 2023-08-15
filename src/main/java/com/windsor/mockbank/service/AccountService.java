@@ -6,9 +6,9 @@ import com.windsor.mockbank.dto.AccountRequest;
 import com.windsor.mockbank.model.Account;
 import com.windsor.mockbank.model.User;
 import com.windsor.mockbank.util.UniqueIdentifierGenerator;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,15 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AccountService {
 
     private final static Logger log = LoggerFactory.getLogger(AccountService.class);
-
-    @Autowired
-    private AccountDao accountDao;
-
-    @Autowired
-    private UserDao userDao;
+    private final AccountDao accountDao;
+    private final UserDao userDao;
 
     public List<Account> createAccounts(List<AccountRequest> accountRequestList) {
 

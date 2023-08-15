@@ -9,7 +9,8 @@ CREATE TABLE user
     user_key           VARCHAR(20)                         NOT NULL UNIQUE KEY,
     token              VARCHAR(300)                        NOT NULL,
     email              VARCHAR(50)                         NOT NULL UNIQUE KEY,
-    password           VARCHAR(50)                         NOT NULL,
+    password           VARCHAR(100)                        NOT NULL,
+    role               VARCHAR(20)                         NOT NULL,
     created_date       TIMESTAMP default CURRENT_TIMESTAMP NOT NULL,
     last_modified_date TIMESTAMP default CURRENT_TIMESTAMP NOT NULL on update CURRENT_TIMESTAMP
 );
